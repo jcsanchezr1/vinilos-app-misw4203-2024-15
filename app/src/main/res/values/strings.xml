@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Vinilos</string>
+    <string name="logo_description">Logo vinilos</string>
+    <string name="visitor_button_text">Soy visitante</string>
+    <string name="collector_button_text">Soy coleccionista</string>
+</resources>
