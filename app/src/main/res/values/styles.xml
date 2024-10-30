@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
@@ -14,4 +15,15 @@
         <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/poppins_semibold</item>
     </style>
+
+    <style name="BottomNavigationActiveText" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="BottomNavigationInactiveText" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
 </resources>
