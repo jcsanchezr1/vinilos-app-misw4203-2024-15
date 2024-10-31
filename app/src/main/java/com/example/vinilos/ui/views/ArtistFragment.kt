@@ -36,6 +36,14 @@ class ArtistFragment : Fragment() {
         recyclerView = binding.artistRv
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
+
+        binding.musiciansButton.setOnClickListener {
+            viewModel.loadMusicians()
+        }
+
+        binding.bandsButton.setOnClickListener {
+            viewModel.loadBands()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

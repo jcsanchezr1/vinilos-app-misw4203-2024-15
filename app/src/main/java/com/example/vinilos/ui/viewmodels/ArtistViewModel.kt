@@ -14,7 +14,6 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
 
     private val bandRepository = BandRepository(application)
 
-    // TODO: Use musicianRepository
     private val musicianRepository = MusicianRepository(application)
 
     private val _artists = MutableLiveData<List<Artist>>()
@@ -28,11 +27,21 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
     init {
-        refreshDataFromNetwork()
+        loadMusicians()
     }
 
-    private fun refreshDataFromNetwork() {
+    fun loadBands() {
         bandRepository.refreshData({
+            _artists.postValue(it)
+            _eventNetworkError.value = false
+            _isNetworkErrorShown.value = false
+        }, {
+            _eventNetworkError.value = true
+        })
+    }
+
+    fun loadMusicians() {
+        musicianRepository.refreshData({
             _artists.postValue(it)
             _eventNetworkError.value = false
             _isNetworkErrorShown.value = false

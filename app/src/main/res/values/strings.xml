@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Vinilos</string>
     <string name="logo_description">Logo vinilos</string>
+    <string name="bands_button_text">Bandas</string>
+    <string name="musicians_button_text">Músicos</string>
     <string name="visitor_button_text">Soy visitante</string>
     <string name="collector_button_text">Soy coleccionista</string>
     <string name="albums_bottom_nav">Álbumes</string>
