@@ -87,3 +87,6 @@
 
 # Android Profiling
 **/*.hprof
+
+## OS
+.DS_Store
