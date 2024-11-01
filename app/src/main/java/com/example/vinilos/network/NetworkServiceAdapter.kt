@@ -123,10 +123,10 @@ class NetworkServiceAdapter constructor(context: Context) {
                             val performerItem = performersArray.getJSONObject(j)
                             performers.add(
                                 Artist(
-                                    id = item.getInt("id"),
-                                    name = item.getString("name"),
-                                    image = item.getString("image"),
-                                    description = item.getString("description"),
+                                    id = performerItem.getInt("id"),
+                                    name = performerItem.getString("name"),
+                                    image = performerItem.getString("image"),
+                                    description = performerItem.getString("description"),
                                     creationDate = "",
                                     albums = emptyList(),
                                     type = Artist.ArtistType.MUSICIAN
