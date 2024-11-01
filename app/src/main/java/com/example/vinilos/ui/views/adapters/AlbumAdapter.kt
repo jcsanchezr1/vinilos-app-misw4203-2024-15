@@ -9,7 +9,6 @@ import com.example.vinilos.R
 import com.example.vinilos.databinding.AlbumItemBinding
 import com.example.vinilos.models.Album
 
-
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     var albums: List<Album> = emptyList()
@@ -31,7 +30,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
         holder.viewDataBinding.also {
-            it.albums = albums[position]
+            it.album = albums[position]
         }
     }
 
@@ -46,6 +45,5 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
             val LAYOUT = R.layout.album_item
         }
     }
-
 
 }
