@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.vinilos.R
 import com.example.vinilos.databinding.AlbumItemBinding
 import com.example.vinilos.models.Album
@@ -32,6 +33,12 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
         holder.viewDataBinding.also {
             it.album = albums[position]
         }
+
+        Glide.with(holder.itemView.context)
+            .load(holder.viewDataBinding.album?.cover)
+            .placeholder(R.drawable.album_placeholder)
+            .error(R.drawable.album_placeholder)
+            .into(holder.viewDataBinding.ivAlbumCover)
     }
 
     override fun getItemCount(): Int {

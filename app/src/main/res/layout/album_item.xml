@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp">
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
 
         <ImageView
             android:id="@+id/ivAlbumCover"
@@ -38,7 +39,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/color_text"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="Hola soy el titulo"/>
+                android:text="@{album.name}"/>
 
             <TextView
                 android:id="@+id/tvAlbumDescription"
@@ -47,7 +48,7 @@
                 android:textSize="12sp"
                 android:textColor="@color/hint_text"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Soy la descripción"/>
+                android:text="@{album.genre}"/>
         </LinearLayout>
 
         <ImageView
