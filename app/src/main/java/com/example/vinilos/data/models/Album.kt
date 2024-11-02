@@ -1,6 +1,6 @@
-package com.example.vinilos.models
+package com.example.vinilos.data.models
 
-import com.example.vinilos.models.Artist.ArtistType
+import com.example.vinilos.data.models.Artist.ArtistType
 
 data class Album(
     val id: Int,

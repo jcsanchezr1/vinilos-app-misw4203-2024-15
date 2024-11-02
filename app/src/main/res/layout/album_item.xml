@@ -4,7 +4,7 @@
     <data>
         <variable
             name="album"
-            type="com.example.vinilos.models.Album" />
+            type="com.example.vinilos.data.models.Album" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

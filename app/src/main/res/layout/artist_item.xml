@@ -6,7 +6,7 @@
 
         <variable
             name="artist"
-            type="com.example.vinilos.models.Artist" />
+            type="com.example.vinilos.data.models.Artist" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
