@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.vinilos.models.Artist
-import com.example.vinilos.repositories.BandRepository
-import com.example.vinilos.repositories.MusicianRepository
+import com.example.vinilos.data.models.Artist
+import com.example.vinilos.data.repositories.BandRepository
+import com.example.vinilos.data.repositories.MusicianRepository
 
 class ArtistViewModel(application: Application) : AndroidViewModel(application) {
 

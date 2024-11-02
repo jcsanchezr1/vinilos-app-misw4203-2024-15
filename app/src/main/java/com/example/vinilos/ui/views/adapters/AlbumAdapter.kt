@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
 import com.example.vinilos.databinding.AlbumItemBinding
-import com.example.vinilos.models.Album
+import com.example.vinilos.data.models.Album
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 

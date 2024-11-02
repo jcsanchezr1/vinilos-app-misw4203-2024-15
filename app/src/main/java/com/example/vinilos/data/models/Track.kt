@@ -1,4 +1,4 @@
-package com.example.vinilos.models
+package com.example.vinilos.data.models
 
 data class Track(
     val id: Int,
