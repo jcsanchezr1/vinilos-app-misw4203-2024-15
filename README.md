@@ -36,6 +36,8 @@ previamente desarrollada.
   conectándolo a su máquina. Una vez conectado, seleccione el dispositivo y haga clic en el botón `
   Run App` en Android Studio para iniciar la aplicación.
 
+**Nota:** Para la ejecución en un dispositivo Android se debe habilitar la opción de modo desarrollador.
+
 ## Ejecución de la aplicación (APK)
 
 1. **Descargar el APK:** Obtener el archivo APK de la aplicación, ubicado en el directorio raíz del
