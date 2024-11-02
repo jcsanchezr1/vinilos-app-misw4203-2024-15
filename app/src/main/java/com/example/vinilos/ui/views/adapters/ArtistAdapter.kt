@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.vinilos.R
 import com.example.vinilos.databinding.ArtistItemBinding
 import com.example.vinilos.models.Artist
@@ -32,6 +33,12 @@ class ArtistAdapter : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
         holder.viewDataBinding.also {
             it.artist = artists[position]
         }
+
+        Glide.with(holder.itemView.context)
+            .load(holder.viewDataBinding.artist?.image)
+            .placeholder(R.drawable.album_placeholder)
+            .error(R.drawable.album_placeholder)
+            .into(holder.viewDataBinding.ivArtistImage)
     }
 
     override fun getItemCount(): Int {

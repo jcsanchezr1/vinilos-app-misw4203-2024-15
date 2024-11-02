@@ -4,5 +4,6 @@
     <color name="color_text">#FFFFFF</color>
     <color name="color_primary">#101624</color>
     <color name="color_secondary">#3D548A</color>
+    <color name="color_unpressed">#5F6F95</color>
     <color name="hint_text">#A0A9B0</color>
 </resources>

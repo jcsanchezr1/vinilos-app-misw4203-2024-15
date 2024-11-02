@@ -50,7 +50,8 @@ class NetworkServiceAdapter constructor(context: Context) {
                             )
                         )
                     }
-                    onComplete(list)
+                    val sortedList = list.sortedBy { it.name }
+                    onComplete(sortedList)
                 },
                 {
                     onError(it)
@@ -82,7 +83,8 @@ class NetworkServiceAdapter constructor(context: Context) {
                             )
                         )
                     }
-                    onComplete(list)
+                    val sortedList = list.sortedBy { it.name }
+                    onComplete(sortedList)
                 },
                 {
                     onError(it)
