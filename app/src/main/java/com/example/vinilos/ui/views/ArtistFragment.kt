@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.databinding.ArtistFragmentBinding
 import com.example.vinilos.models.Artist
@@ -29,19 +29,24 @@ class ArtistFragment : Fragment() {
         _binding = ArtistFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         viewModelAdapter = ArtistAdapter()
+        binding.musiciansButton.isSelected = true
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.artistRv
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
         recyclerView.adapter = viewModelAdapter
 
         binding.musiciansButton.setOnClickListener {
+            binding.musiciansButton.isSelected = true
+            binding.bandsButton.isSelected = false
             viewModel.loadMusicians()
         }
 
         binding.bandsButton.setOnClickListener {
+            binding.bandsButton.isSelected = true
+            binding.musiciansButton.isSelected = false
             viewModel.loadBands()
         }
     }
