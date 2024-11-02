@@ -97,6 +97,7 @@ class AlbumListTest {
                 isDisplayed()
             )
         )
+        Thread.sleep(3000)
         appCompatEditText.perform(replaceText("A Day"))
 
         val appCompatEditText4 = onView(
@@ -114,7 +115,6 @@ class AlbumListTest {
         )
         appCompatEditText4.perform(closeSoftKeyboard())
 
-        Thread.sleep(2000)
 
         val linearLayout = onView(
             allOf(
