@@ -114,6 +114,8 @@ class AlbumListTest {
         )
         appCompatEditText4.perform(closeSoftKeyboard())
 
+        Thread.sleep(2000)
+
         val linearLayout = onView(
             allOf(
                 withParent(
@@ -125,6 +127,8 @@ class AlbumListTest {
                 isDisplayed()
             )
         )
+
+
         linearLayout.check(matches(isDisplayed()))
 
 
@@ -188,6 +192,8 @@ class AlbumListTest {
                 isDisplayed()
             )
         )
+
+        Thread.sleep(2000)
         textView2.check(matches(withText("No se encontraron álbumes que coincidan con tu búsqueda")))
     }
 
