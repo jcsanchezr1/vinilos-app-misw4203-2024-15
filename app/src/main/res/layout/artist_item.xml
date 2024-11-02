@@ -14,10 +14,10 @@
         android:layout_height="wrap_content">
 
         <FrameLayout
-            android:layout_width="175dp"
-            android:layout_height="175dp"
+            android:layout_width="148dp"
+            android:layout_height="148dp"
             tools:ignore="MissingConstraints"
-            android:paddingBottom="8dp">
+            android:paddingBottom="30dp">
 
             <ImageView
                 android:id="@+id/ivArtistImage"
