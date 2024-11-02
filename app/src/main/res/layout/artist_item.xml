@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="artist"
+            type="com.example.vinilos.models.Artist" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/frameArtist"
+            android:layout_width="148dp"
+            android:layout_height="148dp"
+            tools:ignore="MissingConstraints"
+            android:paddingBottom="30dp">
+
+            <ImageView
+                android:id="@+id/ivArtistImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/cover_image_style"
+                android:clipToOutline="true"
+                android:contentDescription="@string/artist_image"
+                android:scaleType="centerCrop"
+                android:src="@drawable/album_placeholder" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semibold"
+                android:maxLines="2"
+                android:padding="4dp"
+                android:text="@{artist.name}"
+                android:textAlignment="viewStart"
+                android:textColor="@color/color_text"
+                android:textSize="12sp"
+                tools:ignore="RtlCompat" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
