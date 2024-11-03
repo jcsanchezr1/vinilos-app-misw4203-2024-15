@@ -1,9 +1,9 @@
-package com.example.vinilos.repositories
+package com.example.vinilos.data.repositories
 
 import android.app.Application
 import com.android.volley.VolleyError
-import com.example.vinilos.models.Album
-import com.example.vinilos.network.NetworkServiceAdapter
+import com.example.vinilos.data.models.Album
+import com.example.vinilos.data.network.NetworkServiceAdapter
 
 class AlbumRepository (val application: Application) {
     fun refreshData(callback: (List<Album>) -> Unit, onError: (VolleyError) -> Unit) {
