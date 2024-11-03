@@ -26,4 +26,13 @@
         <item name="android:textSize">12dp</item>
     </style>
 
+    <style name="ArtistButtonStyle">
+        <item name="android:layout_width">92dp</item>
+        <item name="android:layout_height">41dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/artist_button_background_selector</item>
+        <item name="android:textColor">@color/color_text</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+
 </resources>
