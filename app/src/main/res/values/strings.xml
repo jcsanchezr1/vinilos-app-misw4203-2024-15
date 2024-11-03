@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">Vinilos</string>
     <string name="logo_description">Logo vinilos</string>
+    <string name="bands_button_text">Bandas</string>
+    <string name="musicians_button_text">Músicos</string>
     <string name="visitor_button_text">Soy visitante</string>
     <string name="collector_button_text">Soy coleccionista</string>
     <string name="albums_bottom_nav">Álbumes</string>
     <string name="artists_bottom_nav">Artistas</string>
     <string name="collectors_bottom_nav">Coleccionistas</string>
+    <string name="add_album">Crear álbum</string>
+    <string name="logout">Cerrar session</string>
+    <string name="hitn_search_field">Buscar</string>
+    <string name="go_to_detail">Ir al detalle</string>
+    <string name="cover_image">Portada del álbum</string>
+    <string name="artist_image">Imagen del artista</string>
+    <string name="empty_albums">No se encontraron álbumes que coincidan con tu búsqueda</string>
 </resources>
