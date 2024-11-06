@@ -15,13 +15,15 @@ class HomeActivity : AppCompatActivity() {
         val visitorButton = findViewById<Button>(R.id.visitorButton)
         val collectorButton = findViewById<Button>(R.id.collectorButton)
 
-        val intent = Intent(this, MainActivity::class.java)
-
         visitorButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("user_type", "visitor")
             startActivity(intent)
         }
 
         collectorButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("user_type", "collector")
             startActivity(intent)
         }
 
