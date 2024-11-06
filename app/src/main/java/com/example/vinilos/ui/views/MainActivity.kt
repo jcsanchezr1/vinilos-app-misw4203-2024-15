@@ -20,17 +20,17 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val userType = intent.getStringExtra("user_type")
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         headerViewModel = ViewModelProvider(this).get(HeaderViewModel::class.java)
         binding.headerLayout.header = headerViewModel
         binding.headerLayout.lifecycleOwner = this
 
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+        bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
 
                 R.id.albums -> {
-                    headerViewModel.setTitleAndAddButtonVisibility("Álbumes", true)
+                    headerViewModel.setTitleAndAddButtonVisibility("Álbumes", userType == "collector")
                     loadFragment(AlbumFragment())
                     true
                 }
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        headerViewModel.setTitleAndAddButtonVisibility("Álbumes", true)
+        headerViewModel.setTitleAndAddButtonVisibility("Álbumes", userType == "collector")
         loadFragment(AlbumFragment())
 
         binding.headerLayout.ivLogout.setOnClickListener {
