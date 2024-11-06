@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
+    <style name="CustomButtonStyle">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:background">@drawable/button_style</item>
+        <item name="textAllCaps">false</item>
         <item name="android:textColor">@color/color_primary</item>
-        <item name="android:backgroundTint">@color/color_text</item>
-        <item name="android:textSize">14dp</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:background">@drawable/button_style</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
     </style>
 
     <style name="BottomNavigationActiveText" parent="TextAppearance.AppCompat">
         <item name="fontFamily">@font/poppins_medium</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="BottomNavigationInactiveText" parent="TextAppearance.AppCompat">
         <item name="fontFamily">@font/poppins_medium</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="ArtistButtonStyle">
