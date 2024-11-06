@@ -1,13 +1,11 @@
 package com.example.vinilos.ui.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vinilos.R
 import com.example.vinilos.databinding.AlbumFragmentBinding
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
@@ -25,7 +22,6 @@ import java.util.Locale
 
 class AlbumFragment : Fragment() {
 
-    private lateinit var ivLogout: ImageView
     private var _binding: AlbumFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
@@ -36,22 +32,12 @@ class AlbumFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = AlbumFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         viewModelAdapter = AlbumAdapter()
-
-        ivLogout = view.findViewById(R.id.ivLogout)
-        progressBar = view.findViewById(R.id.progressBar)
+        progressBar = binding.progressBar
         recyclerView = binding.albumRv
-
-        ivLogout.setOnClickListener {
-            val intent = Intent(requireActivity(), HomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            requireActivity().finish()
-        }
-
         return view
     }
 
@@ -85,7 +71,7 @@ class AlbumFragment : Fragment() {
         viewModel.albums.observe(viewLifecycleOwner, Observer<List<Album>> {
             it.apply {
                 val sortedAlbums = this.sortedBy { album -> album.name }
-                viewModelAdapter!!.albums = sortedAlbums
+                viewModelAdapter.albums = sortedAlbums
                 progressBar.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
             }
