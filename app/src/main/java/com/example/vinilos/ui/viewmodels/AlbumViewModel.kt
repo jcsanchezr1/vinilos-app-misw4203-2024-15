@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vinilos.data.models.Album
-import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.repositories.AlbumRepository
-import com.example.vinilos.data.repositories.BandRepository
-import com.example.vinilos.data.repositories.MusicianRepository
 
 class AlbumViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -30,7 +27,6 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         loadAlbums()
     }
 
-
     fun loadAlbums() {
         albumRepository.refreshData({
             _albums.postValue(it)
@@ -43,6 +39,14 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
+    }
+
+    fun getAlbumById(id: Int): LiveData<Album?> {
+        val result = MutableLiveData<Album?>()
+        _albums.observeForever { albums ->
+            result.value = albums?.find { it.id == id }
+        }
+        return result
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {

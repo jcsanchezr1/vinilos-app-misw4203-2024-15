@@ -9,6 +9,7 @@
     <string name="artists_bottom_nav">Artistas</string>
     <string name="collectors_bottom_nav">Coleccionistas</string>
     <string name="add_album">Crear álbum</string>
+    <string name="back_album">Ir a listado de álbumes</string>
     <string name="logout">Cerrar session</string>
     <string name="hitn_search_field">Buscar</string>
     <string name="go_to_detail">Ir al detalle</string>

@@ -1,0 +1,65 @@
+<!-- activity_album_detail.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/btnAlbumDetailBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_album"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvAlbumDetailHeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/albums_bottom_nav"
+            android:textColor="@color/color_text"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <!-- Album cover image -->
+    <ImageView
+        android:id="@+id/ivAlbumDetailCover"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:contentDescription="@string/cover_image"
+        android:scaleType="centerCrop" />
+
+    <!-- Album title -->
+    <TextView
+        android:id="@+id/tvAlbumDetailTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingTop="16dp"
+        android:textColor="@color/color_text"
+        android:textSize="24sp" />
+
+    <!-- Album description -->
+    <TextView
+        android:id="@+id/tvAlbumDetailDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:textColor="@color/color_text"
+        android:textSize="16sp" />
+
+</LinearLayout>
