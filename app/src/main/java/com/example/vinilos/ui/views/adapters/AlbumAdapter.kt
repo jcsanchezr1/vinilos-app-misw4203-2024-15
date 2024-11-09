@@ -18,6 +18,9 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
             notifyDataSetChanged()
         }
 
+    var onItemClickListener: ((Album) -> Unit)? = null
+
+
     // Inflates the item layout and returns a ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         val withDataBinding: AlbumItemBinding = DataBindingUtil.inflate(
@@ -30,15 +33,19 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        holder.viewDataBinding.also {
-            it.album = albums[position]
-        }
+        val album = albums[position]
+        holder.viewDataBinding.album = album
 
         Glide.with(holder.itemView.context)
-            .load(holder.viewDataBinding.album?.cover)
+            .load(album.cover)
             .placeholder(R.drawable.album_placeholder)
             .error(R.drawable.album_placeholder)
             .into(holder.viewDataBinding.ivAlbumCover)
+
+        // Set click listener
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.invoke(album)
+        }
     }
 
     override fun getItemCount(): Int {

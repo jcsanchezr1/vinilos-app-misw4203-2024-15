@@ -1,6 +1,6 @@
 package com.example.vinilos.data.models
 
-import com.example.vinilos.data.models.Artist.ArtistType
+import java.io.Serializable
 
 data class Album(
     val id: Int,
@@ -10,7 +10,7 @@ data class Album(
     val releaseDate: String,
     val genre: String,
     val recordLabel: String,
-    val tracks:List<Track>,
-    val performers:List<Artist>,
-    val comments:List<Comment>,
-)
+    val tracks: List<Track>,
+    val performers: List<Artist>,
+    val comments: List<Comment>,
+) : Serializable

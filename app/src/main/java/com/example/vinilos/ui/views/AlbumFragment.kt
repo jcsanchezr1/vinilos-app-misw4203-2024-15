@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.databinding.AlbumFragmentBinding
@@ -45,6 +46,12 @@ class AlbumFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
+
+        // Set the click listener to navigate to the detail fragment
+        viewModelAdapter.onItemClickListener = { album ->
+            val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(album)
+            findNavController().navigate(action)
+        }
 
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

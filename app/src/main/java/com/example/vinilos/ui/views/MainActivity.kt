@@ -3,8 +3,9 @@ package com.example.vinilos.ui.views
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.vinilos.R
 import com.example.vinilos.databinding.ActivityMainBinding
 import com.example.vinilos.ui.viewmodels.HeaderViewModel
@@ -12,8 +13,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var headerViewModel: HeaderViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var headerViewModel: HeaderViewModel
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,18 +28,25 @@ class MainActivity : AppCompatActivity() {
         binding.headerLayout.header = headerViewModel
         binding.headerLayout.lifecycleOwner = this
 
+        // Configuración del NavController
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-
                 R.id.albums -> {
-                    headerViewModel.setTitleAndAddButtonVisibility("Álbumes", userType == "collector")
-                    loadFragment(AlbumFragment())
+                    headerViewModel.setTitleAndAddButtonVisibility(
+                        "Álbumes",
+                        userType == "collector"
+                    )
+                    navController.navigate(R.id.albumFragment)
                     true
                 }
 
                 R.id.artists -> {
                     headerViewModel.setTitleAndAddButtonVisibility("Artistas", false)
-                    loadFragment(ArtistFragment())
+                    navController.navigate(R.id.artistFragment)
                     true
                 }
 
@@ -51,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         headerViewModel.setTitleAndAddButtonVisibility("Álbumes", userType == "collector")
-        loadFragment(AlbumFragment())
 
         binding.headerLayout.ivLogout.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
@@ -59,11 +67,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, fragment)
-            .commit()
     }
 }

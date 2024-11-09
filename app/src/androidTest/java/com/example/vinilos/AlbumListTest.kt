@@ -34,7 +34,7 @@ class AlbumListTest {
     var mActivityScenarioRule = ActivityScenarioRule(HomeActivity::class.java)
 
     @Test
-    fun openAlbumSuccess(){
+    fun openAlbumSuccess() {
         val appCompatButton = onView(
             allOf(
                 withId(R.id.visitorButton), withText("Soy visitante"),
@@ -56,7 +56,6 @@ class AlbumListTest {
         val textView = onView(
             allOf(
                 withId(R.id.tvTitle), withText("Álbumes"),
-                withParent(withParent(withId(R.id.frame_layout))),
                 isDisplayed()
             )
         )
@@ -65,56 +64,36 @@ class AlbumListTest {
 
     @Test
     fun searchAlbumSuccessTest() {
-
-        val appCompatButton = onView(
+        val visitorButton = onView(
             allOf(
                 withId(R.id.visitorButton), withText("Soy visitante"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.main),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    1
-                ),
                 isDisplayed()
             )
         )
-        appCompatButton.perform(click())
+        visitorButton.perform(click())
 
-        val appCompatEditText = onView(
+        // Esperar a que la búsqueda se cargue
+        val searchBar = onView(
             allOf(
-                withId(R.id.searchBar), withText(""),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
+                withId(R.id.searchBar),
                 isDisplayed()
             )
         )
         Thread.sleep(3000)
-        appCompatEditText.perform(replaceText("A Day"))
 
-        val appCompatEditText4 = onView(
+        searchBar.perform(replaceText("A Day"))
+        searchBar.perform(closeSoftKeyboard())
+
+        Thread.sleep(3000)
+
+        // Verificar que la lista de álbumes aparece después de la búsqueda
+        val albumList = onView(
             allOf(
-                withId(R.id.searchBar), withText("A Day"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
+                withId(R.id.albumRv), // Actualizar a tu RecyclerView de álbumes
                 isDisplayed()
             )
         )
-        appCompatEditText4.perform(closeSoftKeyboard())
-
+        albumList.check(matches(isDisplayed()))
 
         val linearLayout = onView(
             allOf(
@@ -128,87 +107,49 @@ class AlbumListTest {
             )
         )
 
-
         linearLayout.check(matches(isDisplayed()))
-
-
     }
+
     @Test
     fun searchAlbumNoSuccessTest() {
-        val appCompatButton = onView(
+        val visitorButton = onView(
             allOf(
                 withId(R.id.visitorButton), withText("Soy visitante"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.main),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    1
-                ),
                 isDisplayed()
             )
         )
-        appCompatButton.perform(click())
+        visitorButton.perform(click())
 
-
-        val appCompatEditText = onView(
+        val searchBar = onView(
             allOf(
-                withId(R.id.searchBar), withText(""),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
+                withId(R.id.searchBar),
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText("white"))
+        searchBar.perform(replaceText("white"))
+        searchBar.perform(closeSoftKeyboard())
 
-        val appCompatEditText4 = onView(
-            allOf(
-                withId(R.id.searchBar), withText("white"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText4.perform(closeSoftKeyboard())
-
-        val textView2 = onView(
+        // Verificar que el mensaje de "No se encontraron resultados" aparece
+        val noResultsText = onView(
             allOf(
                 withId(R.id.tvNoResults),
                 withText("No se encontraron álbumes que coincidan con tu búsqueda"),
-                withParent(withParent(withId(R.id.frame_layout))),
                 isDisplayed()
             )
         )
-
-        Thread.sleep(2000)
-        textView2.check(matches(withText("No se encontraron álbumes que coincidan con tu búsqueda")))
+        noResultsText.check(matches(withText("No se encontraron álbumes que coincidan con tu búsqueda")))
     }
-
 
     private fun childAtPosition(
         parentMatcher: Matcher<View>, position: Int
     ): Matcher<View> {
-
         return object : TypeSafeMatcher<View>() {
             override fun describeTo(description: Description) {
                 description.appendText("Child at position $position in parent ")
                 parentMatcher.describeTo(description)
             }
 
-            public override fun matchesSafely(view: View): Boolean {
+            override fun matchesSafely(view: View): Boolean {
                 val parent = view.parent
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)
