@@ -9,6 +9,7 @@ import com.example.vinilos.R
 import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
+import com.example.vinilos.ui.views.adapters.CommentAdapter
 import com.example.vinilos.ui.views.adapters.PerformerAdapter
 import com.example.vinilos.ui.views.adapters.TrackAdapter
 
@@ -18,6 +19,7 @@ class AlbumDetailActivity : AppCompatActivity() {
     private lateinit var albumViewModel: AlbumViewModel
     private lateinit var performerAdapter: PerformerAdapter
     private lateinit var trackAdapter: TrackAdapter
+    private lateinit var commentAdapter: CommentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         performerAdapter = PerformerAdapter()
         trackAdapter = TrackAdapter()
+        commentAdapter = CommentAdapter()
 
         binding.rvArtistList.apply {
             layoutManager = LinearLayoutManager(this@AlbumDetailActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -42,6 +45,11 @@ class AlbumDetailActivity : AppCompatActivity() {
         binding.rvTracksList.apply {
             layoutManager = LinearLayoutManager(this@AlbumDetailActivity)
             adapter = trackAdapter
+        }
+
+        binding.rvCommentsList.apply {
+            layoutManager = LinearLayoutManager(this@AlbumDetailActivity)
+            adapter = commentAdapter
         }
 
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
@@ -56,6 +64,7 @@ class AlbumDetailActivity : AppCompatActivity() {
 
                 performerAdapter.setPerformers(album.performers)
                 trackAdapter.setTracks(album.tracks)
+                commentAdapter.setComments(album.comments)
 
                 Glide.with(binding.root.context)
                     .load(album.cover)
