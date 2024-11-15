@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
 import com.example.vinilos.ui.views.adapters.AlbumDetailAdapter
@@ -36,7 +37,7 @@ class AlbumDetailActivity : AppCompatActivity() {
             adapter = albumDetailAdapter
         }
 
-        val albumId = intent.getIntExtra("ALBUM_ID", -1)
+        val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
         observeAlbumData(albumId)
     }
 
