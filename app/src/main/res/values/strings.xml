@@ -13,7 +13,9 @@
     <string name="logout">Cerrar session</string>
     <string name="hitn_search_field">Buscar</string>
     <string name="go_to_detail">Ir al detalle</string>
+    <string name="play_track">Reproducir track</string>
     <string name="cover_image">Portada del álbum</string>
     <string name="artist_image">Imagen del artista</string>
     <string name="empty_albums">No se encontraron álbumes que coincidan con tu búsqueda</string>
+    <string name="comments_title">Comentarios</string>
 </resources>

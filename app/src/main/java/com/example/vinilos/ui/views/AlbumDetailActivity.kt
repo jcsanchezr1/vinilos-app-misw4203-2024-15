@@ -1,7 +1,13 @@
 package com.example.vinilos.ui.views
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
@@ -18,6 +24,35 @@ class AlbumDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAlbumDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val spinnerRating = findViewById<Spinner>(R.id.spinnerRating)
+        val ratings = listOf("Selecciona una opción", "1", "2", "3", "4", "5")
+
+        val adapter = object : ArrayAdapter<String>(
+            this,
+            R.layout.score_item,
+            ratings
+        ) {
+            override fun isEnabled(position: Int): Boolean {
+                return position != 0
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val textView = view as TextView
+                textView.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        if (position == 0) R.color.hint_text else R.color.color_primary
+                    )
+                )
+                return view
+            }
+        }
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerRating.adapter = adapter
+        spinnerRating.setSelection(0)
 
         albumViewModel = ViewModelProvider(
             this,
