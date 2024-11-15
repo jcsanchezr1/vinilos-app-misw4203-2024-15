@@ -125,7 +125,7 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
 
         companion object {
             @LayoutRes
-            val LAYOUT = R.layout.activity_album_detail
+            val LAYOUT = R.layout.artist_album_detail_item
         }
     }
 

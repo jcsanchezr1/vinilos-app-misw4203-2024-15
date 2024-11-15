@@ -26,7 +26,6 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         albumDetailAdapter = AlbumDetailAdapter()
 
-        // Set up RecyclerView for albums
         binding.rvArtistList.apply {
             layoutManager = LinearLayoutManager(this@AlbumDetailActivity)
             adapter = albumDetailAdapter
@@ -38,6 +37,7 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         val albumId = intent.getIntExtra("ALBUM_ID", -1)
         observeAlbumData(albumId)
+
     }
 
     private fun observeAlbumData(albumId: Int) {

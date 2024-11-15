@@ -80,13 +80,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvDateAndGenre"
-                android:paddingTop="16dp" />
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/tvDateAndGenre"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="12dp"
+                android:layout_marginTop="12dp"
                 android:textColor="@color/hint_text"
                 android:textSize="12sp"
                 android:text="Agosto 01 de 1984 - Salsa"
@@ -103,7 +103,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvAlbumDetailDescription"
-                android:paddingTop="40dp" />
+                android:layout_marginTop="40dp" />
 
             <TextView
                 android:id="@+id/tvAlbumDetailDescription"
@@ -122,7 +122,7 @@
                 android:id="@+id/tvComments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="32dp"
+                android:layout_marginTop="32dp"
                 android:textColor="@color/color_text"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_semibold"
@@ -194,6 +194,24 @@
                 app:layout_constraintTop_toBottomOf="@id/labelRating"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/publishButton"
+                android:text="@string/publish_button_text"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                style="@style/CustomButtonStyle"
+                app:layout_constraintTop_toBottomOf="@id/spinnerRating"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCommentsList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/publishButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="32dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
