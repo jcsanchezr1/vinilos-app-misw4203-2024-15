@@ -1,6 +1,7 @@
 package com.example.vinilos.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -9,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.repositories.AlbumRepository
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AlbumViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -27,9 +30,6 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         loadAlbums()
     }
 
-    /**
-     * Fetches and refreshes the album data.
-     */
     fun loadAlbums() {
         albumRepository.refreshData({ albumList ->
             _albums.postValue(albumList)
@@ -42,16 +42,10 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    /**
-     * Marks the network error as shown.
-     */
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
     }
 
-    /**
-     * Retrieves an album by its ID.
-     */
     fun getAlbumById(id: Int): LiveData<Album?> {
         val result = MediatorLiveData<Album?>()
         result.addSource(_albums) { albums ->
@@ -60,9 +54,25 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         return result
     }
 
-    /**
-     * Factory for constructing AlbumViewModel with application context.
-     */
+    fun formatDateAndGenre(dateString: String?, genre: String?): String {
+        return try {
+
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = java.util.TimeZone.getTimeZone("UTC")
+
+            val outputFormat = SimpleDateFormat("MMMM dd 'de' yyyy", Locale("es", "CO"))
+
+            val date = dateString?.let { inputFormat.parse(it) }
+            val formattedDate = outputFormat.format(date!!)
+
+            val formattedDateWithCapitalMonth = formattedDate.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
+            "$formattedDateWithCapitalMonth - ${genre ?: ""}"
+        } catch (e: Exception) {
+            "Fecha inválida - ${genre ?: ""}"
+        }
+    }
+
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AlbumViewModel::class.java)) {

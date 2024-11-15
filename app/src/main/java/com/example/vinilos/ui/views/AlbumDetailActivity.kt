@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.example.vinilos.R
 import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
@@ -19,33 +21,29 @@ class AlbumDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inflate the layout
         binding = ActivityAlbumDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize the ViewModel
         albumViewModel = ViewModelProvider(
             this,
             AlbumViewModel.Factory(application)
         )[AlbumViewModel::class.java]
 
-        // Initialize Adapters
+        binding.viewModel = albumViewModel
+
         performerAdapter = PerformerAdapter()
         trackAdapter = TrackAdapter()
 
-        // Set up RecyclerView for Performers
         binding.rvArtistList.apply {
             layoutManager = LinearLayoutManager(this@AlbumDetailActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = performerAdapter
         }
 
-        // Set up RecyclerView for Tracks
         binding.rvTracksList.apply {
             layoutManager = LinearLayoutManager(this@AlbumDetailActivity)
             adapter = trackAdapter
         }
 
-        // Load and observe album data
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
         observeAlbumData(albumId)
     }
@@ -53,12 +51,17 @@ class AlbumDetailActivity : AppCompatActivity() {
     private fun observeAlbumData(albumId: Int) {
         albumViewModel.getAlbumById(albumId).observe(this) { album ->
             if (album != null) {
-                // Bind album details to the layout
+
                 binding.album = album
 
-                // Update nested RecyclerViews
                 performerAdapter.setPerformers(album.performers)
                 trackAdapter.setTracks(album.tracks)
+
+                Glide.with(binding.root.context)
+                    .load(album.cover)
+                    .placeholder(R.drawable.album_placeholder)
+                    .error(R.drawable.album_placeholder)
+                    .into(binding.ivAlbumDetailCover)
             }
         }
     }

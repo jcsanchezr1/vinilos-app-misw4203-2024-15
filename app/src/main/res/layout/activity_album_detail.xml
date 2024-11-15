@@ -3,6 +3,9 @@
 
     <data>
         <variable
+            name="viewModel"
+            type="com.example.vinilos.ui.viewmodels.AlbumViewModel" />
+        <variable
             name="album"
             type="com.example.vinilos.data.models.Album" />
     </data>
@@ -13,7 +16,6 @@
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
@@ -80,7 +82,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvDateAndGenre"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="8dp" />
 
             <TextView
                 android:id="@+id/tvDateAndGenre"
@@ -89,7 +91,7 @@
                 android:layout_marginTop="12dp"
                 android:textColor="@color/hint_text"
                 android:textSize="12sp"
-                android:text="Agosto 01 de 1984 - Salsa"
+                android:text="@{viewModel.formatDateAndGenre(album.releaseDate, album.genre)}"
                 android:fontFamily="@font/poppins_medium"
                 app:layout_constraintTop_toBottomOf="@id/rvArtistList"
                 app:layout_constraintStart_toStartOf="parent"
@@ -103,13 +105,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvAlbumDetailDescription"
-                android:layout_marginTop="40dp" />
+                android:layout_marginTop="32dp" />
 
             <TextView
                 android:id="@+id/tvAlbumDetailDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp"
+                android:paddingTop="32dp"
                 android:textColor="@color/color_text"
                 android:textSize="14sp"
                 android:text="@{album.description}"
