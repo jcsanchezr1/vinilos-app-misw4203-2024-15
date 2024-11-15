@@ -18,7 +18,7 @@ import com.example.vinilos.databinding.TrackAlbumDetailItemBinding
 
 class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailViewHolder>() {
 
-    private var albums: List<Album> = emptyList()
+    var albums: List<Album> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -120,7 +120,7 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
     class PerformerViewHolder(val viewDataBinding: ArtistItemBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
         fun bind(artist: Artist) {
-
+            viewDataBinding.artist = artist
         }
 
         companion object {
@@ -132,7 +132,7 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
     class TrackViewHolder(val viewDataBinding: TrackAlbumDetailItemBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
         fun bind(track: Track) {
-
+            viewDataBinding.track = track
         }
         companion object {
             @LayoutRes
