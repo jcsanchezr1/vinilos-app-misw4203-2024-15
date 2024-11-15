@@ -3,6 +3,8 @@ package com.example.vinilos.ui.views.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.vinilos.R
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.databinding.ArtistAlbumDetailItemBinding
 
@@ -32,6 +34,11 @@ class PerformerAdapter : RecyclerView.Adapter<PerformerAdapter.PerformerViewHold
         RecyclerView.ViewHolder(binding.root) {
         fun bind(artist: Artist) {
             binding.artist = artist
+            Glide.with(binding.root.context)
+                .load(artist.image)
+                .placeholder(R.drawable.album_placeholder)
+                .error(R.drawable.album_placeholder)
+                .into(binding.ivArtistImage)
         }
     }
 }

@@ -26,6 +26,9 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
+    private val _isTracksEmpty = MutableLiveData<Boolean>()
+    val isTracksEmpty: LiveData<Boolean> get() = _isTracksEmpty
+
     init {
         loadAlbums()
     }
@@ -52,6 +55,10 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
             result.value = albums?.find { it.id == id }
         }
         return result
+    }
+
+    fun setAlbum(album: Album) {
+        _isTracksEmpty.value = album.tracks.isEmpty()
     }
 
     fun formatDateAndGenre(dateString: String?, genre: String?): String {

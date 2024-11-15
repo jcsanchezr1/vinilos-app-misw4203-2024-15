@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <variable
@@ -11,7 +12,6 @@
     </data>
 
     <ScrollView android:layout_width="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
@@ -124,9 +124,9 @@
                 android:id="@+id/tvComments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="40dp"
                 android:textColor="@color/color_text"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/comments_title"
                 app:layout_constraintTop_toBottomOf="@id/tvAlbumDetailDescription"
@@ -149,7 +149,7 @@
                     android:autofillHints=""
                     android:background="@drawable/comment_textfield_background"
                     android:gravity="top|start"
-                    android:hint="Escribe tu comentario..."
+                    android:hint="@string/comments_hinttext"
                     android:inputType="textMultiLine"
                     android:maxLines="5"
                     android:maxLength="500"
@@ -177,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Calificación"
+                android:text="@string/comments_score"
                 android:textColor="@color/color_text"
                 android:textSize="12sp"
                 android:fontFamily="@font/poppins_medium"
@@ -187,15 +187,13 @@
             <Spinner
                 android:id="@+id/spinnerRating"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/spinner_background"
                 android:padding="8dp"
-                android:fontFamily="@font/poppins_medium"
-                android:textColor="@color/color_primary"
                 app:layout_constraintTop_toBottomOf="@id/labelRating"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <Button
                 android:id="@+id/publishButton"

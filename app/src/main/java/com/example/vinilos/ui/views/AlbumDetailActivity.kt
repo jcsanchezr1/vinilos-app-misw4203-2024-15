@@ -1,6 +1,10 @@
 package com.example.vinilos.ui.views
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +39,7 @@ class AlbumDetailActivity : AppCompatActivity() {
         trackAdapter = TrackAdapter()
 
         binding.rvArtistList.apply {
-            layoutManager = LinearLayoutManager(this@AlbumDetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(this@AlbumDetailActivity)
             adapter = performerAdapter
         }
 
@@ -44,8 +48,41 @@ class AlbumDetailActivity : AppCompatActivity() {
             adapter = trackAdapter
         }
 
+        albumViewModel.isTracksEmpty.observe(this) { isEmpty ->
+            binding.rvTracksList.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        }
+
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
         observeAlbumData(albumId)
+
+        val adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.rating_options,
+            R.layout.score_item
+        ).apply {
+            setDropDownViewResource(R.layout.score_item_dropdown)
+        }
+
+        binding.spinnerRating.adapter = adapter
+
+        val editText = binding.editTextParagraph
+        val charCounter = binding.charCounter
+
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val currentLength = s?.length ?: 0
+                val maxLength = 500
+                charCounter.text = getString(R.string.char_counter_format, currentLength, maxLength)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        binding.btnAlbumDetailBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun observeAlbumData(albumId: Int) {
@@ -62,6 +99,8 @@ class AlbumDetailActivity : AppCompatActivity() {
                     .placeholder(R.drawable.album_placeholder)
                     .error(R.drawable.album_placeholder)
                     .into(binding.ivAlbumDetailCover)
+
+                albumViewModel.setAlbum(album)
             }
         }
     }

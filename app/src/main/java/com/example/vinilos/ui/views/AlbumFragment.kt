@@ -37,7 +37,6 @@ class AlbumFragment : Fragment() {
         val view = binding.root
         viewModelAdapter = AlbumAdapter()
 
-        // Set up the item click listener to open AlbumDetailActivity with the album ID
         viewModelAdapter.setOnItemClickListener { albumId ->
             val intent = Intent(requireContext(), AlbumDetailActivity::class.java)
             intent.putExtra(Constant.ALBUM_ID, albumId)
@@ -53,7 +52,6 @@ class AlbumFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
 
-        // Set up search bar listener
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 filterAlbums(s.toString())
@@ -74,7 +72,6 @@ class AlbumFragment : Fragment() {
             AlbumViewModel.Factory(activity.application)
         )[AlbumViewModel::class.java]
 
-        // Observe albums and update adapter
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         viewModel.albums.observe(viewLifecycleOwner) { albumList ->
