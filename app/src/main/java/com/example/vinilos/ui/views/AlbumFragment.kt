@@ -37,10 +37,8 @@ class AlbumFragment : Fragment() {
         val view = binding.root
         viewModelAdapter = AlbumAdapter()
         viewModelAdapter.setOnItemClickListener { albumId ->
-            val userTypeVale = arguments?.getString(Constant.USER_TYPE)
             val intent = Intent(requireContext(), AlbumDetailActivity::class.java)
             intent.putExtra(Constant.ALBUM_ID, albumId)
-            intent.putExtra(Constant.USER_TYPE, userTypeVale)
             startActivity(intent)
         }
         progressBar = binding.progressBar

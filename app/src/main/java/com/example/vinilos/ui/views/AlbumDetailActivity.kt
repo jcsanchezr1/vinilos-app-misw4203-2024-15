@@ -1,13 +1,11 @@
 package com.example.vinilos.ui.views
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
 import com.example.vinilos.common.Constant
-import com.example.vinilos.common.UserType
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
 
@@ -40,11 +38,8 @@ class AlbumDetailActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnAlbumDetailBack.setOnClickListener {
-            val userTypeValue = intent.getStringExtra(Constant.USER_TYPE) ?: UserType.VISITOR.type
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra(Constant.USER_TYPE, userTypeValue)
-            startActivity(intent)
+        binding.btnAlbumDetailBack?.setOnClickListener {
+            finish()
         }
     }
 }
