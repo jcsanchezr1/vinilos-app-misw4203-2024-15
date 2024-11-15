@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
 import com.example.vinilos.data.models.Album
-import com.example.vinilos.data.models.Comment
+import com.example.vinilos.data.models.Artist
+import com.example.vinilos.data.models.Track
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
-import com.example.vinilos.databinding.PerformerItemBinding
-import com.example.vinilos.databinding.TrackItemBinding
-import com.example.vinilos.databinding.CommentItemBinding
+import com.example.vinilos.databinding.ArtistItemBinding
+import com.example.vinilos.databinding.TrackAlbumDetailItemBinding
 
 class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailViewHolder>() {
 
@@ -24,7 +24,7 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumDetailViewHolder {
+    /*override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumDetailViewHolder {
         val withDataBinding: ActivityAlbumDetailBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             AlbumDetailViewHolder.LAYOUT,
@@ -32,11 +32,15 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
             false
         )
         return AlbumDetailViewHolder(withDataBinding)
-    }
+    }*/
 
     override fun onBindViewHolder(holder: AlbumDetailViewHolder, position: Int) {
         val album = albums[position]
         holder.bind(album)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumDetailViewHolder {
+        TODO("Not yet implemented")
     }
 
     override fun getItemCount(): Int = albums.size
@@ -51,14 +55,14 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
                 .load(album.cover)
                 .placeholder(R.drawable.album_placeholder)
                 .error(R.drawable.album_placeholder)
-                .into(viewDataBinding.ivAlbumCover)
+                .into(viewDataBinding.ivAlbumDetailCover)
 
             // Set up Performers RecyclerView directly
-            viewDataBinding.recyclerViewPerformers.apply {
+            viewDataBinding.rvArtistList.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = object : RecyclerView.Adapter<PerformerViewHolder>() {
                     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerformerViewHolder {
-                        val binding = PerformerItemBinding.inflate(
+                        val binding = ArtistItemBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                         return PerformerViewHolder(binding)
@@ -72,12 +76,11 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
                 }
             }
 
-            // Set up Tracks RecyclerView directly
-            viewDataBinding.recyclerViewTracks.apply {
+            viewDataBinding.rvTracksList.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = object : RecyclerView.Adapter<TrackViewHolder>() {
                     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-                        val binding = TrackItemBinding.inflate(
+                        val binding = TrackAlbumDetailItemBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false
                         )
                         return TrackViewHolder(binding)
@@ -92,7 +95,7 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
             }
 
             // Set up Comments RecyclerView directly
-            viewDataBinding.recyclerViewComments.apply {
+            /*viewDataBinding.recyclerViewComments.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = object : RecyclerView.Adapter<CommentViewHolder>() {
                     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -108,7 +111,16 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
 
                     override fun getItemCount(): Int = album.comments.size
                 }
-            }
+            }*/
+        }
+
+
+    }
+
+    class PerformerViewHolder(val viewDataBinding: ArtistItemBinding) :
+        RecyclerView.ViewHolder(viewDataBinding.root) {
+        fun bind(artist: Artist) {
+
         }
 
         companion object {
@@ -117,24 +129,21 @@ class AlbumDetailAdapter : RecyclerView.Adapter<AlbumDetailAdapter.AlbumDetailVi
         }
     }
 
-    inner class PerformerViewHolder(private val binding: PerformerItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(performer: Performer) {
-            binding.performer = performer
-        }
-    }
-
-    inner class TrackViewHolder(private val binding: TrackItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class TrackViewHolder(val viewDataBinding: TrackAlbumDetailItemBinding) :
+        RecyclerView.ViewHolder(viewDataBinding.root) {
         fun bind(track: Track) {
-            binding.track = track
+
+        }
+        companion object {
+            @LayoutRes
+            val LAYOUT = R.layout.track_album_detail_item
         }
     }
 
-    inner class CommentViewHolder(private val binding: CommentItemBinding) :
+    /*inner class CommentViewHolder(private val binding: Comment) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(comment: Comment) {
             binding.comment = comment
         }
-    }
+    }*/
 }

@@ -61,18 +61,6 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
 
-        albumViewModel.getAlbumById(albumId).observe(this) { album ->
-            if (album != null) {
-                binding.tvAlbumDetailTitle.text = album.name
-                binding.tvAlbumDetailDescription.text = album.description
-                Glide.with(this)
-                    .load(album.cover)
-                    .placeholder(R.drawable.album_placeholder)
-                    .error(R.drawable.album_placeholder)
-                    .into(binding.ivAlbumDetailCover)
-            }
-        }
-
         binding.btnAlbumDetailBack?.setOnClickListener {
             finish()
         }
