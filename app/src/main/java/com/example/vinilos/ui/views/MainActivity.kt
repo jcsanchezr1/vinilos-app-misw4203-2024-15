@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.collectors -> {
                     headerViewModel.setTitleAndAddButtonVisibility("Coleccionistas", false)
+                    loadFragment(CollectorFragment(), userTypeValue)
                     true
                 }
 
