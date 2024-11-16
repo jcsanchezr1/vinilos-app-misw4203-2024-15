@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,6 +61,7 @@ class AlbumDetailActivity : AppCompatActivity() {
             binding.rvTracksList.visibility = if (isEmpty) View.GONE else View.VISIBLE
         }
 
+
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
         observeAlbumData(albumId)
 
@@ -90,6 +92,22 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         binding.btnAlbumDetailBack.setOnClickListener {
             finish()
+        }
+
+        binding.publishButton.setOnClickListener {
+            val commentText = binding.editTextParagraph.text.toString().trim()
+            val rating = binding.spinnerRating.selectedItem.toString().toIntOrNull()
+
+            if (commentText.isNotEmpty() && rating != null) {
+                albumViewModel.postComment(albumId, commentText, rating)
+
+                binding.editTextParagraph.text.clear()
+                binding.spinnerRating.setSelection(0)
+
+                Toast.makeText(this, "Tu comentario se ha publicado exitosamente", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No debes dejar vacio el campo de comentario.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

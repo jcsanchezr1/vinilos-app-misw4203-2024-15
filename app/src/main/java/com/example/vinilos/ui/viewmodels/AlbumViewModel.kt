@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vinilos.data.models.Album
+import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.repositories.AlbumRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -79,6 +80,33 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
             "Fecha inválida - ${genre ?: ""}"
         }
     }
+
+    fun postComment(albumId: Int, description: String, rating: Int) {
+        val newComment = Comment(
+            id = 0,
+            description = description,
+            rating = rating,
+            collector = 100
+        )
+
+        albumRepository.postComment(albumId, newComment, { createdComment ->
+            // Find the album in the existing list and update its comments
+            val updatedAlbums = _albums.value?.map { album ->
+                if (album.id == albumId) {
+                    val updatedComments = album.comments + createdComment
+                    album.copy(comments = updatedComments)
+                } else {
+                    album
+                }
+            }
+
+            _albums.postValue(updatedAlbums)
+        }, { error ->
+            Log.e("AlbumViewModel", "Error creando el comentario: ${error.message}")
+            _eventNetworkError.postValue(true)
+        })
+    }
+
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
