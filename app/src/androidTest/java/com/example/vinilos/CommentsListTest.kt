@@ -25,6 +25,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anything
+import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
@@ -48,7 +49,7 @@ class CommentsListTest {
 
         val appCompatButton = onView(
             allOf(
-                withId(R.id.visitorButton), withText("Soy visitante"),
+                withId(R.id.collectorButton), withText("Soy coleccionista"),
                 childAtPosition(
                     allOf(
                         withId(R.id.main),
@@ -57,7 +58,7 @@ class CommentsListTest {
                             0
                         )
                     ),
-                    1
+                    2
                 ),
                 isDisplayed()
             )
@@ -84,7 +85,7 @@ class CommentsListTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         Thread.sleep(700)
-
+        val randomText = generateRandomText(10)
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.editTextParagraph),
@@ -100,7 +101,7 @@ class CommentsListTest {
                 )
             )
         )
-        appCompatEditText.perform(scrollTo(), replaceText("test comments"), closeSoftKeyboard())
+        appCompatEditText.perform(scrollTo(), replaceText(randomText), closeSoftKeyboard())
 
 
         // Added a sleep statement to match the app's execution delay.
@@ -130,6 +131,9 @@ class CommentsListTest {
         val appCompatTextView = onData(anything())
             .inAdapterView(withClassName(`is`("androidx.appcompat.widget.DropDownListView")))
             .atPosition(1)
+        appCompatTextView.perform(click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("1")))
+            .perform(click()) // Select the item
         appCompatTextView.perform(click())
 
         val appCompatButton2 = onView(
@@ -163,12 +167,19 @@ class CommentsListTest {
 
         val textView = onView(
             allOf(
-                withId(R.id.tvCommentDescription), withText("test comments"),
+                withId(R.id.tvCommentDescription), withText(randomText),
                 withParent(withParent(withId(R.id.rvCommentsList))),
                 isDisplayed()
             )
         )
-        textView.check(matches(withText("test comments")))
+        textView.check(matches(withText(randomText)))
+    }
+
+    private fun generateRandomText(length: Int): String {
+        val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9') + " "
+        return (1..length)
+            .map { charset.random() }
+            .joinToString("")
     }
 
     private fun childAtPosition(

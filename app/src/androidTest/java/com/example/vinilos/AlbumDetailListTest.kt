@@ -89,7 +89,7 @@ class AlbumDetailListTest {
             )
         )
         textView.check(matches(isDisplayed()))
-
+        Thread.sleep(3000)
         val textView2 = onView(
             allOf(
                 withId(R.id.tvArtistName), withText("Queen"),
@@ -98,7 +98,7 @@ class AlbumDetailListTest {
             )
         )
         textView2.check(matches(isDisplayed()))
-
+        Thread.sleep(3000)
         val textView3 = onView(
             allOf(
                 withId(R.id.tvAlbumDetailDescription),
@@ -108,7 +108,7 @@ class AlbumDetailListTest {
             )
         )
         textView3.check(matches(isDisplayed()))
-
+        Thread.sleep(3000)
         val textView4 = onView(
             allOf(
                 withId(R.id.tvComments), withText("Comentarios"),
