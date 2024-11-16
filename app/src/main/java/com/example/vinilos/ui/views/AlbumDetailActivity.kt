@@ -1,16 +1,13 @@
 package com.example.vinilos.ui.views
 
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -149,7 +146,7 @@ class AlbumDetailActivity : AppCompatActivity() {
 
                 performerAdapter.setPerformers(album.performers)
                 trackAdapter.setTracks(album.tracks)
-                commentAdapter.setComments(album.comments)
+                commentAdapter.submitList(album.comments.reversed())
 
                 Glide.with(binding.root.context)
                     .load(album.cover)

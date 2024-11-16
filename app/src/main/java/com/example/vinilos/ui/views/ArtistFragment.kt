@@ -18,12 +18,12 @@ class ArtistFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: ArtistViewModel
-    private var viewModelAdapter: ArtistAdapter? = null
+    private lateinit var viewModelAdapter: ArtistAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ArtistFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         viewModelAdapter = ArtistAdapter()
@@ -57,10 +57,8 @@ class ArtistFragment : Fragment() {
         viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application)).get(
             ArtistViewModel::class.java
         )
-        viewModel.artists.observe(viewLifecycleOwner) {
-            it.apply {
-                viewModelAdapter!!.artists = this
-            }
+        viewModel.artists.observe(viewLifecycleOwner) { albumList ->
+            viewModelAdapter.submitList(albumList)
         }
         viewModel.eventNetworkError.observe(
             viewLifecycleOwner
