@@ -9,6 +9,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Artist
+import com.example.vinilos.data.models.Collector
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.models.Track
 import org.json.JSONArray
@@ -175,6 +176,38 @@ class NetworkServiceAdapter constructor(context: Context) {
                 })
         )
     }
+
+    fun getCollectors(onComplete: (resp: List<Collector>) -> Unit, onError: (error: VolleyError) -> Unit) {
+        requestQueue.add(
+            getRequest("bands",
+                { response ->
+                    val resp = JSONArray(response)
+                    val list = mutableListOf<Collector>()
+                    for (i in 0 until resp.length()) {
+                        val item = resp.getJSONObject(i)
+                        list.add(
+                            i,
+                            Collector(
+                                id = item.getInt("id"),
+                                name = item.getString("name"),
+                                telephone = item.getString("telephone"),
+                                email = item.getString("email"),
+                                comments = emptyList(),
+                                favoritePerformers = emptyList(),
+                                collectorAlbums = emptyList(),
+                            )
+                        )
+                    }
+                    val sortedList = list.sortedBy { it.name }
+                    onComplete(sortedList)
+                },
+                {
+                    onError(it)
+                })
+        )
+    }
+
+
 
     fun postComment(
         albumId: Int,
