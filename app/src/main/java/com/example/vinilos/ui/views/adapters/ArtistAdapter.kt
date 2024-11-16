@@ -7,8 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
-import com.example.vinilos.databinding.ArtistItemBinding
 import com.example.vinilos.data.models.Artist
+import com.example.vinilos.databinding.ArtistItemBinding
 
 class ArtistAdapter : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
@@ -18,7 +18,6 @@ class ArtistAdapter : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
             notifyDataSetChanged()
         }
 
-    // Inflates the item layout and returns a ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val withDataBinding: ArtistItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),

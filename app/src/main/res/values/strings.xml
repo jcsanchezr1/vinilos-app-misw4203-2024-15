@@ -4,15 +4,30 @@
     <string name="bands_button_text">Bandas</string>
     <string name="musicians_button_text">Músicos</string>
     <string name="visitor_button_text">Soy visitante</string>
+    <string name="publish_button_text">Publicar</string>
     <string name="collector_button_text">Soy coleccionista</string>
     <string name="albums_bottom_nav">Álbumes</string>
     <string name="artists_bottom_nav">Artistas</string>
     <string name="collectors_bottom_nav">Coleccionistas</string>
     <string name="add_album">Crear álbum</string>
+    <string name="back_album">Ir a listado de álbumes</string>
     <string name="logout">Cerrar session</string>
     <string name="hitn_search_field">Buscar</string>
     <string name="go_to_detail">Ir al detalle</string>
+    <string name="play_track">Reproducir track</string>
     <string name="cover_image">Portada del álbum</string>
     <string name="artist_image">Imagen del artista</string>
     <string name="empty_albums">No se encontraron álbumes que coincidan con tu búsqueda</string>
+    <string name="comments_title">Comentarios</string>
+    <string name="comments_hinttext">Escribe tu comentario…</string>
+    <string name="comments_score">Calificación</string>
+    <string-array name="rating_options">
+        <item>Selecciona una opción</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string name="char_counter_format">%1$d/%2$d</string>
 </resources>

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vinilos.R
+import com.example.vinilos.common.Constant
+import com.example.vinilos.common.UserType
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,13 +19,13 @@ class HomeActivity : AppCompatActivity() {
 
         visitorButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("user_type", "visitor")
+            intent.putExtra(Constant.USER_TYPE, UserType.VISITOR.type)
             startActivity(intent)
         }
 
         collectorButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("user_type", "collector")
+            intent.putExtra(Constant.USER_TYPE, UserType.COLLECTOR.type)
             startActivity(intent)
         }
 
