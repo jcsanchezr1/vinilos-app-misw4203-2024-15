@@ -1,6 +1,7 @@
 package com.example.vinilos.ui.views
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +36,20 @@ class AlbumDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAlbumDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val userType = intent.getStringExtra(Constant.USER_TYPE)
+
+        if (userType == "collector") {
+            binding.publishButton.visibility = View.VISIBLE
+            binding.labelRating.visibility = View.VISIBLE
+            binding.spinnerRating.visibility = View.VISIBLE
+            binding.flComment.visibility = View.VISIBLE
+        } else {
+            binding.publishButton.visibility = View.GONE
+            binding.labelRating.visibility = View.GONE
+            binding.spinnerRating.visibility = View.GONE
+            binding.flComment.visibility = View.GONE
+        }
 
         albumViewModel = ViewModelProvider(
             this,
@@ -64,7 +80,6 @@ class AlbumDetailActivity : AppCompatActivity() {
         albumViewModel.isTracksEmpty.observe(this) { isEmpty ->
             binding.rvTracksList.visibility = if (isEmpty) View.GONE else View.VISIBLE
         }
-
 
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
         observeAlbumData(albumId)

@@ -9,6 +9,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Artist
+import com.example.vinilos.data.models.Collector
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.models.Track
 import org.json.JSONArray
@@ -105,7 +106,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                     for (i in 0 until resp.length()) {
                         val item = resp.getJSONObject(i)
 
-                        // Parse the tracks list
                         val tracksArray = item.getJSONArray("tracks")
                         val tracks = mutableListOf<Track>()
                         for (j in 0 until tracksArray.length()) {
@@ -119,7 +119,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                             )
                         }
 
-                        // Parse the performers list
                         val performersArray = item.getJSONArray("performers")
                         val performers = mutableListOf<Artist>()
                         for (j in 0 until performersArray.length()) {
@@ -137,7 +136,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                             )
                         }
 
-                        // Parse the comments list
                         val commentsArray = item.getJSONArray("comments")
                         val comments = mutableListOf<Comment>()
                         for (j in 0 until commentsArray.length()) {
@@ -164,7 +162,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                                 recordLabel = item.getString("recordLabel"),
                                 tracks = tracks,
                                 performers = performers,
-                                comments = comments
+                                comments = comments.reversed()
                             )
                         )
                     }
@@ -215,6 +213,36 @@ class NetworkServiceAdapter constructor(context: Context) {
         }
 
         requestQueue.add(postRequest)
+    }
+
+    fun getCollectors(onComplete: (resp: List<Collector>) -> Unit, onError: (error: VolleyError) -> Unit) {
+        requestQueue.add(
+            getRequest("collectors",
+                { response ->
+                    val resp = JSONArray(response)
+                    val list = mutableListOf<Collector>()
+                    for (i in 0 until resp.length()) {
+                        val item = resp.getJSONObject(i)
+                        list.add(
+                            i,
+                            Collector(
+                                id = item.getInt("id"),
+                                name = item.getString("name"),
+                                telephone = item.getString("telephone"),
+                                email = item.getString("email"),
+                                comments = emptyList(),
+                                favoritePerformers = emptyList(),
+                                collectorAlbums = emptyList(),
+                            )
+                        )
+                    }
+                    val sortedList = list.sortedBy { it.name }
+                    onComplete(sortedList)
+                },
+                {
+                    onError(it)
+                })
+        )
     }
 
     private fun getRequest(
