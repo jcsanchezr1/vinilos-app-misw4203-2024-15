@@ -85,7 +85,7 @@ class CommentsListTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         Thread.sleep(700)
-
+        val randomText = generateRandomText(10)
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.editTextParagraph),
@@ -101,7 +101,7 @@ class CommentsListTest {
                 )
             )
         )
-        appCompatEditText.perform(scrollTo(), replaceText("test comments"), closeSoftKeyboard())
+        appCompatEditText.perform(scrollTo(), replaceText(randomText), closeSoftKeyboard())
 
 
         // Added a sleep statement to match the app's execution delay.
@@ -167,12 +167,19 @@ class CommentsListTest {
 
         val textView = onView(
             allOf(
-                withId(R.id.tvCommentDescription), withText("test comments"),
+                withId(R.id.tvCommentDescription), withText(randomText),
                 withParent(withParent(withId(R.id.rvCommentsList))),
                 isDisplayed()
             )
         )
-        textView.check(matches(withText("test comments")))
+        textView.check(matches(withText(randomText)))
+    }
+
+    private fun generateRandomText(length: Int): String {
+        val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9') + " "
+        return (1..length)
+            .map { charset.random() }
+            .joinToString("")
     }
 
     private fun childAtPosition(
