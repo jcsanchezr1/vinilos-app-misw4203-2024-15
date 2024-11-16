@@ -105,6 +105,12 @@ class AlbumFragment : Fragment() {
         }
     }
 
+    fun String.normalize(): String {
+        return Normalizer.normalize(this, Normalizer.Form.NFD)
+            .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+            .lowercase(Locale.getDefault())
+    }
+
     private fun filterAlbums(query: String) {
         val normalizedQuery = query.normalize()
         val filteredAlbums = viewModel.albums.value?.filter { album ->
@@ -112,11 +118,5 @@ class AlbumFragment : Fragment() {
         } ?: emptyList()
         viewModelAdapter.albums = filteredAlbums
         binding.tvNoResults.visibility = if (filteredAlbums.isEmpty()) View.VISIBLE else View.GONE
-    }
-
-    private fun String.normalize(): String {
-        return Normalizer.normalize(this, Normalizer.Form.NFD)
-            .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
-            .lowercase(Locale.getDefault())
     }
 }

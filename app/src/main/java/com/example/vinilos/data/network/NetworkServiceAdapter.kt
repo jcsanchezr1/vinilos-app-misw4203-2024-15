@@ -174,38 +174,6 @@ class NetworkServiceAdapter constructor(context: Context) {
         )
     }
 
-    fun getCollectors(onComplete: (resp: List<Collector>) -> Unit, onError: (error: VolleyError) -> Unit) {
-        requestQueue.add(
-            getRequest("collectors",
-                { response ->
-                    val resp = JSONArray(response)
-                    val list = mutableListOf<Collector>()
-                    for (i in 0 until resp.length()) {
-                        val item = resp.getJSONObject(i)
-                        list.add(
-                            i,
-                            Collector(
-                                id = item.getInt("id"),
-                                name = item.getString("name"),
-                                telephone = item.getString("telephone"),
-                                email = item.getString("email"),
-                                comments = emptyList(),
-                                favoritePerformers = emptyList(),
-                                collectorAlbums = emptyList(),
-                            )
-                        )
-                    }
-                    val sortedList = list.sortedBy { it.name }
-                    onComplete(sortedList)
-                },
-                {
-                    onError(it)
-                })
-        )
-    }
-
-
-
     fun postComment(
         albumId: Int,
         comment: Comment,
@@ -245,6 +213,36 @@ class NetworkServiceAdapter constructor(context: Context) {
         }
 
         requestQueue.add(postRequest)
+    }
+
+    fun getCollectors(onComplete: (resp: List<Collector>) -> Unit, onError: (error: VolleyError) -> Unit) {
+        requestQueue.add(
+            getRequest("collectors",
+                { response ->
+                    val resp = JSONArray(response)
+                    val list = mutableListOf<Collector>()
+                    for (i in 0 until resp.length()) {
+                        val item = resp.getJSONObject(i)
+                        list.add(
+                            i,
+                            Collector(
+                                id = item.getInt("id"),
+                                name = item.getString("name"),
+                                telephone = item.getString("telephone"),
+                                email = item.getString("email"),
+                                comments = emptyList(),
+                                favoritePerformers = emptyList(),
+                                collectorAlbums = emptyList(),
+                            )
+                        )
+                    }
+                    val sortedList = list.sortedBy { it.name }
+                    onComplete(sortedList)
+                },
+                {
+                    onError(it)
+                })
+        )
     }
 
     private fun getRequest(
