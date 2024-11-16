@@ -48,7 +48,7 @@ class CommentsListTest {
 
         val appCompatButton = onView(
             allOf(
-                withId(R.id.visitorButton), withText("Soy visitante"),
+                withId(R.id.collectorButton), withText("Soy coleccionista"),
                 childAtPosition(
                     allOf(
                         withId(R.id.main),
@@ -57,7 +57,7 @@ class CommentsListTest {
                             0
                         )
                     ),
-                    1
+                    2
                 ),
                 isDisplayed()
             )
