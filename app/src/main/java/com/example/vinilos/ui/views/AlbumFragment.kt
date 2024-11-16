@@ -36,20 +36,19 @@ class AlbumFragment : Fragment() {
         _binding = AlbumFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         viewModelAdapter = AlbumAdapter()
+
         viewModelAdapter.setOnItemClickListener { albumId ->
-            val userTypeVale = arguments?.getString(Constant.USER_TYPE)
             val intent = Intent(requireContext(), AlbumDetailActivity::class.java)
             intent.putExtra(Constant.ALBUM_ID, albumId)
-            intent.putExtra(Constant.USER_TYPE, userTypeVale)
             startActivity(intent)
         }
+
         progressBar = binding.progressBar
         recyclerView = binding.albumRv
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
 
@@ -75,18 +74,14 @@ class AlbumFragment : Fragment() {
 
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-
-        viewModel.albums.observe(viewLifecycleOwner) {
-            it.apply {
-                val sortedAlbums = this.sortedBy { album -> album.name }
-                viewModelAdapter.albums = sortedAlbums
-                progressBar.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
+        viewModel.albums.observe(viewLifecycleOwner) { albumList ->
+            val sortedAlbums = albumList.sortedBy { it.name }
+            viewModelAdapter.albums = sortedAlbums
+            progressBar.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
         }
-        viewModel.eventNetworkError.observe(
-            viewLifecycleOwner
-        ) { isNetworkError ->
+
+        viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
         }
     }
@@ -104,12 +99,6 @@ class AlbumFragment : Fragment() {
         }
     }
 
-    fun String.normalize(): String {
-        return Normalizer.normalize(this, Normalizer.Form.NFD)
-            .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
-            .lowercase(Locale.getDefault())
-    }
-
     private fun filterAlbums(query: String) {
         val normalizedQuery = query.normalize()
         val filteredAlbums = viewModel.albums.value?.filter { album ->
@@ -117,5 +106,11 @@ class AlbumFragment : Fragment() {
         } ?: emptyList()
         viewModelAdapter.albums = filteredAlbums
         binding.tvNoResults.visibility = if (filteredAlbums.isEmpty()) View.VISIBLE else View.GONE
+    }
+
+    private fun String.normalize(): String {
+        return Normalizer.normalize(this, Normalizer.Form.NFD)
+            .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+            .lowercase(Locale.getDefault())
     }
 }

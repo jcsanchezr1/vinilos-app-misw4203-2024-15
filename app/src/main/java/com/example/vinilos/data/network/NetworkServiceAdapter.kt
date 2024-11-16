@@ -12,6 +12,7 @@ import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.models.Track
 import org.json.JSONArray
+import org.json.JSONObject
 
 class NetworkServiceAdapter constructor(context: Context) {
     companion object {
@@ -145,7 +146,8 @@ class NetworkServiceAdapter constructor(context: Context) {
                                 Comment(
                                     id = commentItem.getInt("id"),
                                     description = commentItem.getString("description"),
-                                    rating = commentItem.getInt("rating")
+                                    rating = commentItem.getInt("rating"),
+                                    collector = 100
                                 )
                             )
                         }
@@ -172,6 +174,47 @@ class NetworkServiceAdapter constructor(context: Context) {
                     onError(it)
                 })
         )
+    }
+
+    fun postComment(
+        albumId: Int,
+        comment: Comment,
+        onComplete: (Comment) -> Unit,
+        onError: (error: VolleyError) -> Unit
+    ) {
+        val url = "${BASE_URL}albums/$albumId/comments"
+
+        val requestBody = JSONObject()
+        requestBody.put("description", comment.description)
+        requestBody.put("rating", comment.rating)
+        requestBody.put("collector", comment.collector)
+
+        val postRequest = object : StringRequest(
+            Method.POST, url,
+            { response ->
+                val responseObject = JSONObject(response)
+                val createdComment = Comment(
+                    id = responseObject.getInt("id"),
+                    description = responseObject.getString("description"),
+                    rating = responseObject.getInt("rating"),
+                    collector = 100,
+                )
+                onComplete(createdComment)
+            },
+            { error ->
+                onError(error)
+            }
+        ) {
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getBody(): ByteArray {
+                return requestBody.toString().toByteArray()
+            }
+        }
+
+        requestQueue.add(postRequest)
     }
 
     private fun getRequest(
