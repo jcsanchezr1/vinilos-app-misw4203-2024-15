@@ -25,6 +25,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anything
+import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
@@ -130,6 +131,9 @@ class CommentsListTest {
         val appCompatTextView = onData(anything())
             .inAdapterView(withClassName(`is`("androidx.appcompat.widget.DropDownListView")))
             .atPosition(1)
+        appCompatTextView.perform(click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("1")))
+            .perform(click()) // Select the item
         appCompatTextView.perform(click())
 
         val appCompatButton2 = onView(
