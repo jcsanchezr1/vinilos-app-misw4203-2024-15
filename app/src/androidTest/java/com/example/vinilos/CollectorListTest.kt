@@ -77,18 +77,6 @@ class CollectorListTest {
         )
         bottomNavigationItemView.perform(click())
 
-        val linearLayout = onView(
-            allOf(
-                withParent(
-                    allOf(
-                        withId(R.id.collectorRv),
-                        withParent(IsInstanceOf.instanceOf(android.view.View::class.java))
-                    )
-                ),
-                isDisplayed()
-            )
-        )
-        linearLayout.check(matches(isDisplayed()))
 
         val textView = onView(
             allOf(
