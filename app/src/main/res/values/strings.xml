@@ -37,4 +37,8 @@
     <string name="comment_error">No debes dejar vacío el campo de comentario.</string>
     <string name="score_error">Debes seleccionar una calificación de para el álbum.</string>
     <string name="success_comment">Tu comentario se ha publicado exitosamente.</string>
+    <string name="type_collector">collector</string>
+    <string name="cover_image_collector">Logo del coleccionista</string>
+    <string name="empty_collectors">No se encontraron coleccionistas que coincidan con tu búsqueda</string>
+    <string name="char_counter_default">0/500</string>
 </resources>

@@ -14,7 +14,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
     private var comments: List<Comment> = emptyList()
 
     fun setComments(newComments: List<Comment>) {
-        comments = newComments
+        comments = newComments.reversed()
         notifyDataSetChanged()
     }
 
