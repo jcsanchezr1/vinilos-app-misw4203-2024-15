@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vinilos.R
 import com.example.vinilos.common.Constant
+import com.example.vinilos.common.UserType
 import com.example.vinilos.databinding.AlbumFragmentBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
 import com.example.vinilos.ui.views.adapters.AlbumAdapter
@@ -37,9 +40,12 @@ class AlbumFragment : Fragment() {
         val view = binding.root
         viewModelAdapter = AlbumAdapter()
 
+        val userType = arguments?.getString(Constant.USER_TYPE)
+
         viewModelAdapter.setOnItemClickListener { albumId ->
             val intent = Intent(requireContext(), AlbumDetailActivity::class.java)
             intent.putExtra(Constant.ALBUM_ID, albumId)
+            intent.putExtra(Constant.USER_TYPE, userType)
             startActivity(intent)
         }
 

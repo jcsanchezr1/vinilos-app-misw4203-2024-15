@@ -106,7 +106,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                     for (i in 0 until resp.length()) {
                         val item = resp.getJSONObject(i)
 
-                        // Parse the tracks list
                         val tracksArray = item.getJSONArray("tracks")
                         val tracks = mutableListOf<Track>()
                         for (j in 0 until tracksArray.length()) {
@@ -120,7 +119,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                             )
                         }
 
-                        // Parse the performers list
                         val performersArray = item.getJSONArray("performers")
                         val performers = mutableListOf<Artist>()
                         for (j in 0 until performersArray.length()) {
@@ -138,7 +136,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                             )
                         }
 
-                        // Parse the comments list
                         val commentsArray = item.getJSONArray("comments")
                         val comments = mutableListOf<Comment>()
                         for (j in 0 until commentsArray.length()) {
@@ -165,7 +162,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                                 recordLabel = item.getString("recordLabel"),
                                 tracks = tracks,
                                 performers = performers,
-                                comments = comments
+                                comments = comments.reversed()
                             )
                         )
                     }

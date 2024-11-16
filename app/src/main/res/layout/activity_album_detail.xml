@@ -166,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="8dp"
-                    android:text="0/500"
+                    android:text="@string/char_counter_default"
                     android:textColor="@color/hint_text"
                     android:textSize="11sp"
                     android:fontFamily="@font/poppins_regular" />
