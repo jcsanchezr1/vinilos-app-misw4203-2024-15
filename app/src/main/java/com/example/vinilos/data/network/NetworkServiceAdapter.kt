@@ -179,7 +179,7 @@ class NetworkServiceAdapter constructor(context: Context) {
 
     fun getCollectors(onComplete: (resp: List<Collector>) -> Unit, onError: (error: VolleyError) -> Unit) {
         requestQueue.add(
-            getRequest("bands",
+            getRequest("collectors",
                 { response ->
                     val resp = JSONArray(response)
                     val list = mutableListOf<Collector>()

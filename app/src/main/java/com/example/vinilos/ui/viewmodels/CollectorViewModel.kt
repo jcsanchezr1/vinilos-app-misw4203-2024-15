@@ -15,7 +15,7 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     private val collectorRepository = CollectorRepository(application)
 
     private val _collectors = MutableLiveData<List<Collector>>()
-    val artists: LiveData<List<Collector>> get() = _collectors
+    val collectors: LiveData<List<Collector>> get() = _collectors
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
