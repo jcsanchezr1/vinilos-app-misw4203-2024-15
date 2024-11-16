@@ -81,7 +81,6 @@ class AlbumDetailActivity : AppCompatActivity() {
             binding.rvTracksList.visibility = if (isEmpty) View.GONE else View.VISIBLE
         }
 
-
         val albumId = intent.getIntExtra(Constant.ALBUM_ID, -1)
         observeAlbumData(albumId)
 

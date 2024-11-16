@@ -16,7 +16,6 @@
     <string name="go_to_detail">Ir al detalle</string>
     <string name="play_track">Reproducir track</string>
     <string name="cover_image">Portada del álbum</string>
-    <string name="cover_image_collector">Logo del coleccionista</string>
     <string name="artist_image">Imagen del artista</string>
     <string name="empty_albums">No se encontraron álbumes que coincidan con tu búsqueda</string>
     <string name="comments_title">Comentarios</string>
@@ -30,15 +29,5 @@
         <item>4</item>
         <item>5</item>
     </string-array>
-    <string name="score">Estrella</string>
     <string name="char_counter_format">%1$d/%2$d</string>
-    <string name="char_counter_default">0/500</string>
-    <string name="success_title">¡Perfecto!</string>
-    <string name="error_title">Hubo un problema</string>
-    <string name="button_dialog">ACEPTAR</string>
-    <string name="comment_error">No debes dejar vacío el campo de comentario.</string>
-    <string name="score_error">Debes seleccionar una calificación de para el álbum.</string>
-    <string name="success_comment">Tu comentario se ha publicado exitosamente.</string>
-    <string name="empty_collectors">No se encontraron coleccionistas que coincidan con tu búsqueda</string>
-    <string name="type_collector">collector</string>
 </resources>

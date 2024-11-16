@@ -81,32 +81,6 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun postComment(albumId: Int, description: String, rating: Int) {
-        val newComment = Comment(
-            id = 0,
-            description = description,
-            rating = rating,
-            collector = 100
-        )
-
-        albumRepository.postComment(albumId, newComment, { createdComment ->
-            // Find the album in the existing list and update its comments
-            val updatedAlbums = _albums.value?.map { album ->
-                if (album.id == albumId) {
-                    val updatedComments = album.comments + createdComment
-                    album.copy(comments = updatedComments)
-                } else {
-                    album
-                }
-            }
-
-            _albums.postValue(updatedAlbums)
-        }, { error ->
-            Log.e("AlbumViewModel", "Error creando el comentario: ${error.message}")
-            _eventNetworkError.postValue(true)
-        })
-    }
-
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
