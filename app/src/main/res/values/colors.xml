@@ -6,4 +6,6 @@
     <color name="color_secondary">#3D548A</color>
     <color name="color_unpressed">#5F6F95</color>
     <color name="hint_text">#A0A9B0</color>
+    <color name="error">#FF4843</color>
+    <color name="success">#28D094</color>
 </resources>

@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vinilos.data.models.Album
+import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.repositories.AlbumRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -79,6 +80,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
             "Fecha inválida - ${genre ?: ""}"
         }
     }
+
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
