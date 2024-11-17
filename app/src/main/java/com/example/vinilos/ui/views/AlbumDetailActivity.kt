@@ -1,16 +1,13 @@
 package com.example.vinilos.ui.views
 
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +36,7 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         val userType = intent.getStringExtra(Constant.USER_TYPE)
 
-        if (userType == "collector") {
+        if (userType == getString(R.string.type_collector)) {
             binding.publishButton.visibility = View.VISIBLE
             binding.labelRating.visibility = View.VISIBLE
             binding.spinnerRating.visibility = View.VISIBLE
@@ -147,9 +144,9 @@ class AlbumDetailActivity : AppCompatActivity() {
 
                 binding.album = album
 
-                performerAdapter.setPerformers(album.performers)
-                trackAdapter.setTracks(album.tracks)
-                commentAdapter.setComments(album.comments)
+                performerAdapter.submitList(album.performers)
+                trackAdapter.submitList(album.tracks)
+                commentAdapter.submitList(album.comments.reversed())
 
                 Glide.with(binding.root.context)
                     .load(album.cover)
@@ -162,7 +159,7 @@ class AlbumDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun showCustomDialog(message: String, isSuccess: Boolean) {
+    private fun showCustomDialog(message: String, isSuccess: Boolean) {
         val dialog = Dialog(this)
         val binding = CustomDialogBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)

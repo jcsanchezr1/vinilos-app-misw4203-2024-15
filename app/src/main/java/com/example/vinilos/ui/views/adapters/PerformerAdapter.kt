@@ -2,20 +2,15 @@ package com.example.vinilos.ui.views.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.databinding.ArtistAlbumDetailItemBinding
 
-class PerformerAdapter : RecyclerView.Adapter<PerformerAdapter.PerformerViewHolder>() {
-
-    private var performers: List<Artist> = emptyList()
-
-    fun setPerformers(newPerformers: List<Artist>) {
-        performers = newPerformers
-        notifyDataSetChanged()
-    }
+class PerformerAdapter : ListAdapter<Artist, PerformerAdapter.PerformerViewHolder>(PerformerDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerformerViewHolder {
         val binding = ArtistAlbumDetailItemBinding.inflate(
@@ -25,20 +20,31 @@ class PerformerAdapter : RecyclerView.Adapter<PerformerAdapter.PerformerViewHold
     }
 
     override fun onBindViewHolder(holder: PerformerViewHolder, position: Int) {
-        holder.bind(performers[position])
+        val performer = getItem(position)
+        holder.bind(performer)
     }
 
-    override fun getItemCount(): Int = performers.size
-
-    class PerformerViewHolder(private val binding: ArtistAlbumDetailItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class PerformerViewHolder(private val viewDataBinding: ArtistAlbumDetailItemBinding) :
+        RecyclerView.ViewHolder(viewDataBinding.root) {
         fun bind(artist: Artist) {
-            binding.artist = artist
-            Glide.with(binding.root.context)
+            viewDataBinding.artist = artist
+            Glide.with(viewDataBinding.root.context)
                 .load(artist.image)
                 .placeholder(R.drawable.album_placeholder)
                 .error(R.drawable.album_placeholder)
-                .into(binding.ivArtistImage)
+                .into(viewDataBinding.ivArtistImage)
+        }
+    }
+
+    companion object {
+        val PerformerDiffCallback = object : DiffUtil.ItemCallback<Artist>() {
+            override fun areItemsTheSame(oldItem: Artist, newItem: Artist): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Artist, newItem: Artist): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

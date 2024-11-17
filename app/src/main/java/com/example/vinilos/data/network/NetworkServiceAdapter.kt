@@ -15,10 +15,10 @@ import com.example.vinilos.data.models.Track
 import org.json.JSONArray
 import org.json.JSONObject
 
-class NetworkServiceAdapter constructor(context: Context) {
+class NetworkServiceAdapter(context: Context) {
     companion object {
         const val BASE_URL = "https://api-backvynils-misw4203-600c0ea84373.herokuapp.com/"
-        var instance: NetworkServiceAdapter? = null
+        private var instance: NetworkServiceAdapter? = null
         fun getInstance(context: Context) =
             instance ?: synchronized(this) {
                 instance ?: NetworkServiceAdapter(context).also {

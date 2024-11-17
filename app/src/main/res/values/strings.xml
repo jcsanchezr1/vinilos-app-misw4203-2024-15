@@ -29,7 +29,6 @@
         <item>4</item>
         <item>5</item>
     </string-array>
-    <string name="score">Estrella</string>
     <string name="char_counter_format">%1$d/%2$d</string>
     <string name="success_title">¡Perfecto!</string>
     <string name="error_title">Hubo un problema</string>

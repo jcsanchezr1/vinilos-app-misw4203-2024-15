@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.models.Collector
 import com.example.vinilos.data.repositories.CollectorRepository
 
@@ -17,10 +16,10 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     private val _collectors = MutableLiveData<List<Collector>>()
     val collectors: LiveData<List<Collector>> get() = _collectors
 
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData(false)
 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
@@ -28,7 +27,7 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
         loadCollectors()
     }
 
-    fun loadCollectors() {
+    private fun loadCollectors() {
         collectorRepository.getCollectors({
             _collectors.postValue(it)
             _eventNetworkError.value = false
