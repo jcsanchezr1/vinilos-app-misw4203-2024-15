@@ -35,8 +35,8 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     fun loadBands() {
         viewModelScope.launch {
             try {
-                val artistList = bandRepository.refreshData() // Calls the suspend function
-                _artists.postValue(artistList) // Updates LiveData
+                val artistList = bandRepository.refreshData()
+                _artists.postValue(artistList)
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)

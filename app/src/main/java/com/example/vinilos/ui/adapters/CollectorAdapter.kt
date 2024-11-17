@@ -1,4 +1,4 @@
-package com.example.vinilos.ui.views.adapters
+package com.example.vinilos.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +11,9 @@ import com.example.vinilos.R
 import com.example.vinilos.data.models.Collector
 import com.example.vinilos.databinding.CollectorItemBinding
 
-class CollectorAdapter : ListAdapter<Collector, CollectorAdapter.CollectorViewHolder>(CollectorDiffCallback) {
+class CollectorAdapter : ListAdapter<Collector, CollectorAdapter.CollectorViewHolder>(
+    CollectorDiffCallback
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectorViewHolder {
         val withDataBinding: CollectorItemBinding = DataBindingUtil.inflate(

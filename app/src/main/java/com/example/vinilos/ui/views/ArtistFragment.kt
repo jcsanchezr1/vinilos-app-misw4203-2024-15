@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.databinding.ArtistFragmentBinding
 import com.example.vinilos.ui.viewmodels.ArtistViewModel
-import com.example.vinilos.ui.views.adapters.ArtistAdapter
+import com.example.vinilos.ui.adapters.ArtistAdapter
 
 class ArtistFragment : Fragment() {
     private var _binding: ArtistFragmentBinding? = null

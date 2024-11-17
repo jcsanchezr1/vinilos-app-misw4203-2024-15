@@ -39,8 +39,8 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     private fun loadAlbums() {
         viewModelScope.launch {
             try {
-                val albumList = albumRepository.getAlbums() // Calls the suspend function
-                _albums.postValue(albumList) // Updates LiveData
+                val albumList = albumRepository.getAlbums()
+                _albums.postValue(albumList)
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)

@@ -32,7 +32,7 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     private fun loadCollectors() {
         viewModelScope.launch {
             try {
-                val collectorList = collectorRepository.getCollectors() // Calls the suspend function
+                val collectorList = collectorRepository.getCollectors()
                 _collectors.postValue(collectorList)
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
