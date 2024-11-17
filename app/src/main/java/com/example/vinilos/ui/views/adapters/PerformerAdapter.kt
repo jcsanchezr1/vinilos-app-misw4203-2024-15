@@ -24,7 +24,7 @@ class PerformerAdapter : ListAdapter<Artist, PerformerAdapter.PerformerViewHolde
         holder.bind(performer)
     }
 
-    class PerformerViewHolder(val viewDataBinding: ArtistAlbumDetailItemBinding) :
+    class PerformerViewHolder(private val viewDataBinding: ArtistAlbumDetailItemBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
         fun bind(artist: Artist) {
             viewDataBinding.artist = artist

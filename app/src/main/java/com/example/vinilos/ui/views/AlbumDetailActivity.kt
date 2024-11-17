@@ -159,7 +159,7 @@ class AlbumDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun showCustomDialog(message: String, isSuccess: Boolean) {
+    private fun showCustomDialog(message: String, isSuccess: Boolean) {
         val dialog = Dialog(this)
         val binding = CustomDialogBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)

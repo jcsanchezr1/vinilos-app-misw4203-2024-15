@@ -54,9 +54,7 @@ class ArtistFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application)).get(
-            ArtistViewModel::class.java
-        )
+        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application))[ArtistViewModel::class.java]
         viewModel.artists.observe(viewLifecycleOwner) { albumList ->
             viewModelAdapter.submitList(albumList)
         }

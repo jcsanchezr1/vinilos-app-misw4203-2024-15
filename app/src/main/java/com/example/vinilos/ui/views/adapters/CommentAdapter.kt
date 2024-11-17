@@ -4,15 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.R
-import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.databinding.CommentItemBinding
-import com.example.vinilos.ui.views.adapters.AlbumAdapter.Companion.AlbumDiffCallback
 
 class CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentDiffCallback) {
 
@@ -28,7 +25,7 @@ class CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(Co
         holder.bind(comment)
     }
 
-    class CommentViewHolder(val viewDataBinding: CommentItemBinding) :
+    class CommentViewHolder(private val viewDataBinding: CommentItemBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
         fun bind(comment: Comment) {
             viewDataBinding.comment = comment

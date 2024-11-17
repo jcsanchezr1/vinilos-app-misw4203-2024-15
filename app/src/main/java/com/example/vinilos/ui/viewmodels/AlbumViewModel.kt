@@ -21,10 +21,10 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>> get() = _albums
 
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData(false)
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
     private val _isTracksEmpty = MutableLiveData<Boolean>()
@@ -34,7 +34,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         loadAlbums()
     }
 
-    fun loadAlbums() {
+    private fun loadAlbums() {
         albumRepository.refreshData({ albumList ->
             _albums.postValue(albumList)
             _eventNetworkError.value = false

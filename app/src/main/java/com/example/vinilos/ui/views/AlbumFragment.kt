@@ -102,7 +102,7 @@ class AlbumFragment : Fragment() {
         }
     }
 
-    fun String.normalize(): String {
+    private fun String.normalize(): String {
         return Normalizer.normalize(this, Normalizer.Form.NFD)
             .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
             .lowercase(Locale.getDefault())
