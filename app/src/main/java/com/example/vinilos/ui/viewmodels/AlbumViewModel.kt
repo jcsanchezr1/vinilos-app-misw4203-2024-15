@@ -90,7 +90,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
                     0,
                     description,
                     rating,
-                    collector = 100
+                    100
                 ))
                 val updatedAlbums = _albums.value?.map { album ->
                     if (album.id == albumId) {

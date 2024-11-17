@@ -129,7 +129,7 @@ class AlbumDetailActivity : AppCompatActivity() {
             } else {
                 lifecycleScope.launch {
                     try {
-                        albumViewModel.postComment(albumId, commentText, rating,)
+                        albumViewModel.postComment(albumId, commentText, rating)
 
                         // Clear the input fields after successful submission
                         binding.editTextParagraph.text.clear()

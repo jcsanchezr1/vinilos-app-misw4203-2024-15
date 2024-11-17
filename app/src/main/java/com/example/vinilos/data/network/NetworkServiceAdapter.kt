@@ -228,7 +228,7 @@ class NetworkServiceAdapter(context: Context) {
             recordLabel = item.getString("recordLabel"),
             tracks = tracks,
             performers = performers,
-            comments = comments
+            comments = comments.reversed()
         )
     }
 }
