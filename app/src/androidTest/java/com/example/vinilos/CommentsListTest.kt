@@ -172,6 +172,7 @@ class CommentsListTest {
                 isDisplayed()
             )
         )
+        textView.perform(scrollTo())
         textView.check(matches(withText(randomText)))
     }
 

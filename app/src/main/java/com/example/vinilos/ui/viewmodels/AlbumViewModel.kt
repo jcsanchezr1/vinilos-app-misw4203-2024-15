@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.repositories.AlbumRepository
+import com.example.vinilos.data.repositories.CommentRepository
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,9 +20,13 @@ import java.util.TimeZone
 class AlbumViewModel(application: Application) : AndroidViewModel(application) {
 
     private val albumRepository = AlbumRepository(application)
+    private val commentRepository = CommentRepository(application)
 
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>> get() = _albums
+
+    private val _comments = MutableLiveData<List<Comment>>()
+    val comments: LiveData<List<Comment>> get() = _comments
 
     private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
@@ -82,27 +87,31 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
             "Fecha inválida - ${genre ?: ""}"
         }
     }
+    fun loadComments(albumId: Int) {
+        viewModelScope.launch {
+            try {
+                val commentList = commentRepository.getComments(albumId)
+                _comments.postValue(commentList)
+                _eventNetworkError.value = false
+            } catch (e: Exception) {
+                _eventNetworkError.value = true
+            }
+        }
+    }
 
     fun postComment(albumId: Int, description: String, rating: Int) {
         viewModelScope.launch {
             try {
-                val newComment = albumRepository.postComment(albumId, Comment(
-                    0,
-                    description,
-                    rating,
-                    100
-                ))
-                val updatedAlbums = _albums.value?.map { album ->
-                    if (album.id == albumId) {
-                        val updatedComments = album.comments + newComment
-                        album.copy(comments = updatedComments)
-                    } else {
-                        album
-                    }
-                }
-                _albums.postValue(updatedAlbums!!)
+                val newComment = Comment(
+                    id = 0,
+                    description = description,
+                    rating = rating,
+                    collector = 100
+                )
+                commentRepository.postComment(albumId, newComment)
+                loadComments(albumId)
             } catch (e: Exception) {
-                _eventNetworkError.postValue(true)
+                _eventNetworkError.value = true
             }
         }
     }
