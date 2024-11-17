@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vinilos.R
 import com.example.vinilos.common.Constant
-import com.example.vinilos.common.UserType
 import com.example.vinilos.databinding.AlbumFragmentBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
 import com.example.vinilos.ui.views.adapters.AlbumAdapter
@@ -105,7 +103,7 @@ class AlbumFragment : Fragment() {
         }
     }
 
-    fun String.normalize(): String {
+    private fun String.normalize(): String {
         return Normalizer.normalize(this, Normalizer.Form.NFD)
             .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
             .lowercase(Locale.getDefault())

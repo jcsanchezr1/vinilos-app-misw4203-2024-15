@@ -1,18 +1,20 @@
 package com.example.vinilos.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.repositories.AlbumRepository
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class AlbumViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -34,16 +36,16 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         loadAlbums()
     }
 
-    fun loadAlbums() {
-        albumRepository.refreshData({ albumList ->
-            _albums.postValue(albumList)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            if (_albums.value.isNullOrEmpty()) {
-                _eventNetworkError.value = true
+    private fun loadAlbums() {
+        viewModelScope.launch {
+            try {
+                val albumList = albumRepository.getAlbums() // Calls the suspend function
+                _albums.postValue(albumList) // Updates LiveData
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
             }
-        })
+        }
     }
 
     fun onNetworkErrorShown() {
@@ -66,7 +68,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         return try {
 
             val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            inputFormat.timeZone = java.util.TimeZone.getTimeZone("UTC")
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
 
             val outputFormat = SimpleDateFormat("MMMM dd 'de' yyyy", Locale("es", "CO"))
 
@@ -82,29 +84,27 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun postComment(albumId: Int, description: String, rating: Int) {
-        val newComment = Comment(
-            id = 0,
-            description = description,
-            rating = rating,
-            collector = 100
-        )
-
-        albumRepository.postComment(albumId, newComment, { createdComment ->
-            // Find the album in the existing list and update its comments
-            val updatedAlbums = _albums.value?.map { album ->
-                if (album.id == albumId) {
-                    val updatedComments = album.comments + createdComment
-                    album.copy(comments = updatedComments)
-                } else {
-                    album
+        viewModelScope.launch {
+            try {
+                val newComment = albumRepository.postComment(albumId, Comment(
+                    0,
+                    description,
+                    rating,
+                    collector = 100
+                ))
+                val updatedAlbums = _albums.value?.map { album ->
+                    if (album.id == albumId) {
+                        val updatedComments = album.comments + newComment
+                        album.copy(comments = updatedComments)
+                    } else {
+                        album
+                    }
                 }
+                _albums.postValue(updatedAlbums!!)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
             }
-
-            _albums.postValue(updatedAlbums)
-        }, { error ->
-            Log.e("AlbumViewModel", "Error creando el comentario: ${error.message}")
-            _eventNetworkError.postValue(true)
-        })
+        }
     }
 
 

@@ -6,9 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.vinilos.data.models.Artist
+import androidx.lifecycle.viewModelScope
 import com.example.vinilos.data.models.Collector
 import com.example.vinilos.data.repositories.CollectorRepository
+import kotlinx.coroutines.launch
 
 class CollectorViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,13 +30,15 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun loadCollectors() {
-        collectorRepository.getCollectors({
-            _collectors.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            try {
+                val collectorList = collectorRepository.getCollectors() // Calls the suspend function
+                _collectors.postValue(collectorList) // Updates LiveData
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
     }
 
     fun onNetworkErrorShown() {
