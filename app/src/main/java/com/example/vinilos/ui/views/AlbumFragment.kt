@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -80,7 +79,7 @@ class AlbumFragment : Fragment() {
         recyclerView.visibility = View.GONE
         viewModel.albums.observe(viewLifecycleOwner) { albumList ->
             val sortedAlbums = albumList.sortedBy { it.name }
-            viewModelAdapter.albums = sortedAlbums
+            viewModelAdapter.submitList(sortedAlbums)
             progressBar.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
@@ -114,7 +113,8 @@ class AlbumFragment : Fragment() {
         val filteredAlbums = viewModel.albums.value?.filter { album ->
             album.name.normalize().contains(normalizedQuery)
         } ?: emptyList()
-        viewModelAdapter.albums = filteredAlbums
+        val sortedFilterAlbums = filteredAlbums.sortedBy { it.name }
+        viewModelAdapter.submitList(sortedFilterAlbums)
         binding.tvNoResults.visibility = if (filteredAlbums.isEmpty()) View.VISIBLE else View.GONE
     }
 }

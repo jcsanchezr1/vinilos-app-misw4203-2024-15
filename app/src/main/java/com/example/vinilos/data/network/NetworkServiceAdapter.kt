@@ -16,13 +16,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class NetworkServiceAdapter private constructor(context: Context) {
-
+class NetworkServiceAdapter(context: Context) {
     companion object {
         const val BASE_URL = "https://api-backvynils-misw4203-600c0ea84373.herokuapp.com/"
-        @Volatile
         private var instance: NetworkServiceAdapter? = null
-
         fun getInstance(context: Context) =
             instance ?: synchronized(this) {
                 instance ?: NetworkServiceAdapter(context).also { instance = it }
@@ -81,8 +78,8 @@ class NetworkServiceAdapter private constructor(context: Context) {
     }
 
     suspend fun getMusicians(): List<Artist> {
-        val response = getRequest("musicians") // Fetch the data using getRequest
-        return parseMusicians(response) // Parse the response using a helper function
+        val response = getRequest("musicians")
+        return parseMusicians(response)
     }
 
     suspend fun getBands(): List<Artist> {
@@ -109,8 +106,6 @@ class NetworkServiceAdapter private constructor(context: Context) {
 
     suspend fun postComment(albumId: Int, comment: Comment): Comment {
         val path = "albums/$albumId/comments"
-
-        // Create the JSON request body
         val requestBody = JSONObject().apply {
             put("description", comment.description)
             put("rating", comment.rating)
@@ -129,8 +124,8 @@ class NetworkServiceAdapter private constructor(context: Context) {
     }
 
     suspend fun getCollectors(): List<Collector> {
-        val response = getRequest("collectors") // Reuse the getRequest function
-        return parseCollectors(response) // Parse the response using a helper function
+        val response = getRequest("collectors")
+        return parseCollectors(response)
     }
 
     private fun parseMusicians(response: String): List<Artist> {
@@ -177,7 +172,6 @@ class NetworkServiceAdapter private constructor(context: Context) {
 
         return collectors
     }
-
 
     private fun parseAlbum(item: JSONObject): Album {
         val tracksArray = item.getJSONArray("tracks")

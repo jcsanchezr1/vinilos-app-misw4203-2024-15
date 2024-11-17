@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val userTypeValue = intent.getStringExtra(Constant.USER_TYPE) ?: UserType.VISITOR.type
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        headerViewModel = ViewModelProvider(this).get(HeaderViewModel::class.java)
+        headerViewModel = ViewModelProvider(this)[HeaderViewModel::class.java]
         binding.headerLayout.header = headerViewModel
         binding.headerLayout.lifecycleOwner = this
 

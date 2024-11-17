@@ -4,18 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.R
 import com.example.vinilos.data.models.Collector
 import com.example.vinilos.databinding.CollectorItemBinding
 
-class CollectorAdapter : RecyclerView.Adapter<CollectorAdapter.CollectorViewHolder>() {
-
-    var collectors: List<Collector> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class CollectorAdapter : ListAdapter<Collector, CollectorAdapter.CollectorViewHolder>(CollectorDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectorViewHolder {
         val withDataBinding: CollectorItemBinding = DataBindingUtil.inflate(
@@ -28,14 +24,8 @@ class CollectorAdapter : RecyclerView.Adapter<CollectorAdapter.CollectorViewHold
     }
 
     override fun onBindViewHolder(holder: CollectorViewHolder, position: Int) {
-        holder.viewDataBinding.also {
-            it.collector = collectors[position]
-        }
-
-    }
-
-    override fun getItemCount(): Int {
-        return collectors.size
+        val collector = getItem(position)
+        holder.viewDataBinding.collector = collector
     }
 
     class CollectorViewHolder(val viewDataBinding: CollectorItemBinding) :
@@ -43,6 +33,18 @@ class CollectorAdapter : RecyclerView.Adapter<CollectorAdapter.CollectorViewHold
         companion object {
             @LayoutRes
             val LAYOUT = R.layout.collector_item
+        }
+    }
+
+    companion object {
+        val CollectorDiffCallback = object : DiffUtil.ItemCallback<Collector>() {
+            override fun areItemsTheSame(oldItem: Collector, newItem: Collector): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Collector, newItem: Collector): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 

@@ -18,10 +18,10 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     private val _collectors = MutableLiveData<List<Collector>>()
     val collectors: LiveData<List<Collector>> get() = _collectors
 
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData(false)
 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
@@ -29,11 +29,11 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
         loadCollectors()
     }
 
-    fun loadCollectors() {
+    private fun loadCollectors() {
         viewModelScope.launch {
             try {
                 val collectorList = collectorRepository.getCollectors() // Calls the suspend function
-                _collectors.postValue(collectorList) // Updates LiveData
+                _collectors.postValue(collectorList)
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)
