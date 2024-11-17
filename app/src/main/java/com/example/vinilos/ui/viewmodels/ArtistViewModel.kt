@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.repositories.BandRepository
 import com.example.vinilos.data.repositories.MusicianRepository
+import kotlinx.coroutines.launch
 
 class ArtistViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -31,23 +33,27 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadBands() {
-        bandRepository.refreshData({
-            _artists.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            try {
+                val artistList = bandRepository.refreshData() // Calls the suspend function
+                _artists.postValue(artistList) // Updates LiveData
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
     }
 
     fun loadMusicians() {
-        musicianRepository.refreshData({
-            _artists.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            try {
+                val artistList = musicianRepository.refreshData()
+                _artists.postValue(artistList)
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
     }
 
     fun onNetworkErrorShown() {

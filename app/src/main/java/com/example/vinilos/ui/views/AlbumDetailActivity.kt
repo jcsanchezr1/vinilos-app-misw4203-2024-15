@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
@@ -20,6 +21,7 @@ import com.example.vinilos.ui.viewmodels.AlbumViewModel
 import com.example.vinilos.ui.views.adapters.CommentAdapter
 import com.example.vinilos.ui.views.adapters.PerformerAdapter
 import com.example.vinilos.ui.views.adapters.TrackAdapter
+import kotlinx.coroutines.launch
 
 class AlbumDetailActivity : AppCompatActivity() {
 
@@ -114,28 +116,39 @@ class AlbumDetailActivity : AppCompatActivity() {
             val commentText = binding.editTextParagraph.text.toString().trim()
             val rating = binding.spinnerRating.selectedItem.toString().toIntOrNull()
 
-            if(commentText.isEmpty()){
+            if (commentText.isEmpty()) {
                 showCustomDialog(
                     message = getString(R.string.comment_error),
                     isSuccess = false
                 )
-            } else if (rating == null ){
+            } else if (rating == null) {
                 showCustomDialog(
                     message = getString(R.string.score_error),
                     isSuccess = false
                 )
             } else {
-                albumViewModel.postComment(albumId, commentText, rating)
+                lifecycleScope.launch {
+                    try {
+                        albumViewModel.postComment(albumId, commentText, rating)
 
-                binding.editTextParagraph.text.clear()
-                binding.spinnerRating.setSelection(0)
+                        // Clear the input fields after successful submission
+                        binding.editTextParagraph.text.clear()
+                        binding.spinnerRating.setSelection(0)
 
-                showCustomDialog(
-                    message = getString(R.string.success_comment),
-                    isSuccess = true
-                )
+                        showCustomDialog(
+                            message = getString(R.string.success_comment),
+                            isSuccess = true
+                        )
+                    } catch (e: Exception) {
+                        showCustomDialog(
+                            message = getString(R.string.comment_error),
+                            isSuccess = false
+                        )
+                    }
+                }
             }
         }
+
     }
 
     private fun observeAlbumData(albumId: Int) {
