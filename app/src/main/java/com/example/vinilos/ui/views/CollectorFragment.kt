@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.databinding.CollectorFragmentBinding
 import com.example.vinilos.ui.viewmodels.CollectorViewModel
-import com.example.vinilos.ui.views.adapters.CollectorAdapter
+import com.example.vinilos.ui.adapters.CollectorAdapter
 import java.text.Normalizer
 import java.util.Locale
 

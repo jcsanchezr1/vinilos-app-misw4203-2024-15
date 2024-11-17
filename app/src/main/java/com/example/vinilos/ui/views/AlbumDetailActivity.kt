@@ -18,9 +18,9 @@ import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
 import com.example.vinilos.databinding.CustomDialogBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
-import com.example.vinilos.ui.views.adapters.CommentAdapter
-import com.example.vinilos.ui.views.adapters.PerformerAdapter
-import com.example.vinilos.ui.views.adapters.TrackAdapter
+import com.example.vinilos.ui.adapters.CommentAdapter
+import com.example.vinilos.ui.adapters.PerformerAdapter
+import com.example.vinilos.ui.adapters.TrackAdapter
 import kotlinx.coroutines.launch
 
 class AlbumDetailActivity : AppCompatActivity() {

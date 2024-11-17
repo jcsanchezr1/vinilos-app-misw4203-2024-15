@@ -1,4 +1,4 @@
-package com.example.vinilos.ui.views.adapters
+package com.example.vinilos.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,9 @@ import com.example.vinilos.R
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.databinding.ArtistAlbumDetailItemBinding
 
-class PerformerAdapter : ListAdapter<Artist, PerformerAdapter.PerformerViewHolder>(PerformerDiffCallback) {
+class PerformerAdapter : ListAdapter<Artist, PerformerAdapter.PerformerViewHolder>(
+    PerformerDiffCallback
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerformerViewHolder {
         val binding = ArtistAlbumDetailItemBinding.inflate(
