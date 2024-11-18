@@ -1,8 +1,6 @@
 package com.example.vinilos
 
 
-import android.view.View
-import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -16,11 +14,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.vinilos.ui.views.HomeActivity
-import org.hamcrest.Description
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
-import org.hamcrest.TypeSafeMatcher
-import org.hamcrest.core.IsInstanceOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,20 +28,10 @@ class AlbumListTest {
     var mActivityScenarioRule = ActivityScenarioRule(HomeActivity::class.java)
 
     @Test
-    fun openAlbumSuccess(){
+    fun openAlbumSuccess() {
         val appCompatButton = onView(
             allOf(
                 withId(R.id.visitorButton), withText("Soy visitante"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.main),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    1
-                ),
                 isDisplayed()
             )
         )
@@ -56,7 +40,6 @@ class AlbumListTest {
         val textView = onView(
             allOf(
                 withId(R.id.tvTitle), withText("Álbumes"),
-                withParent(withParent(withId(R.id.frame_layout))),
                 isDisplayed()
             )
         )
@@ -69,16 +52,6 @@ class AlbumListTest {
         val appCompatButton = onView(
             allOf(
                 withId(R.id.visitorButton), withText("Soy visitante"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.main),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    1
-                ),
                 isDisplayed()
             )
         )
@@ -87,67 +60,38 @@ class AlbumListTest {
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.searchBar), withText(""),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
                 isDisplayed()
             )
         )
         Thread.sleep(3000)
         appCompatEditText.perform(replaceText("A Day"))
-
         val appCompatEditText4 = onView(
             allOf(
                 withId(R.id.searchBar), withText("A Day"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
                 isDisplayed()
             )
         )
         appCompatEditText4.perform(closeSoftKeyboard())
 
-
+        Thread.sleep(3000)
         val linearLayout = onView(
             allOf(
                 withParent(
                     allOf(
-                        withId(R.id.albumRv),
-                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                        withId(R.id.albumRv)
                     )
                 ),
                 isDisplayed()
             )
         )
-
-
         linearLayout.check(matches(isDisplayed()))
-
-
     }
+
     @Test
     fun searchAlbumNoSuccessTest() {
         val appCompatButton = onView(
             allOf(
                 withId(R.id.visitorButton), withText("Soy visitante"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.main),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    1
-                ),
                 isDisplayed()
             )
         )
@@ -157,13 +101,6 @@ class AlbumListTest {
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.searchBar), withText(""),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
                 isDisplayed()
             )
         )
@@ -172,13 +109,6 @@ class AlbumListTest {
         val appCompatEditText4 = onView(
             allOf(
                 withId(R.id.searchBar), withText("white"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.frame_layout),
-                        0
-                    ),
-                    3
-                ),
                 isDisplayed()
             )
         )
@@ -195,24 +125,5 @@ class AlbumListTest {
 
         Thread.sleep(2000)
         textView2.check(matches(withText("No se encontraron álbumes que coincidan con tu búsqueda")))
-    }
-
-
-    private fun childAtPosition(
-        parentMatcher: Matcher<View>, position: Int
-    ): Matcher<View> {
-
-        return object : TypeSafeMatcher<View>() {
-            override fun describeTo(description: Description) {
-                description.appendText("Child at position $position in parent ")
-                parentMatcher.describeTo(description)
-            }
-
-            public override fun matchesSafely(view: View): Boolean {
-                val parent = view.parent
-                return parent is ViewGroup && parentMatcher.matches(parent)
-                        && view == parent.getChildAt(position)
-            }
-        }
     }
 }

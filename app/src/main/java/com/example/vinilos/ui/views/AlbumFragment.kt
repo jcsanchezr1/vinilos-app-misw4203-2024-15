@@ -7,25 +7,21 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vinilos.R
+import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.AlbumFragmentBinding
-import com.example.vinilos.data.models.Album
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
-import com.example.vinilos.ui.views.adapters.AlbumAdapter
+import com.example.vinilos.ui.adapters.AlbumAdapter
 import java.text.Normalizer
 import java.util.Locale
 
 class AlbumFragment : Fragment() {
 
-    private lateinit var ivLogout: ImageView
     private var _binding: AlbumFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
@@ -36,27 +32,26 @@ class AlbumFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = AlbumFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         viewModelAdapter = AlbumAdapter()
 
-        ivLogout = view.findViewById(R.id.ivLogout)
-        progressBar = view.findViewById(R.id.progressBar)
-        recyclerView = binding.albumRv
+        val userType = arguments?.getString(Constant.USER_TYPE)
 
-        ivLogout.setOnClickListener {
-            val intent = Intent(requireActivity(), HomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            requireActivity().finish()
+        viewModelAdapter.setOnItemClickListener { albumId ->
+            val intent = Intent(requireContext(), AlbumDetailActivity::class.java)
+            intent.putExtra(Constant.ALBUM_ID, albumId)
+            intent.putExtra(Constant.USER_TYPE, userType)
+            startActivity(intent)
         }
 
+        progressBar = binding.progressBar
+        recyclerView = binding.albumRv
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
 
@@ -75,26 +70,23 @@ class AlbumFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        viewModel = ViewModelProvider(this, AlbumViewModel.Factory(activity.application)).get(
-            AlbumViewModel::class.java
-        )
+        viewModel = ViewModelProvider(
+            this,
+            AlbumViewModel.Factory(activity.application)
+        )[AlbumViewModel::class.java]
 
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
+        viewModel.albums.observe(viewLifecycleOwner) { albumList ->
+            val sortedAlbums = albumList.sortedBy { it.name }
+            viewModelAdapter.submitList(sortedAlbums)
+            progressBar.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
 
-        viewModel.albums.observe(viewLifecycleOwner, Observer<List<Album>> {
-            it.apply {
-                val sortedAlbums = this.sortedBy { album -> album.name }
-                viewModelAdapter!!.albums = sortedAlbums
-                progressBar.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
-        })
-        viewModel.eventNetworkError.observe(
-            viewLifecycleOwner,
-            Observer<Boolean> { isNetworkError ->
-                if (isNetworkError) onNetworkError()
-            })
+        viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
+            if (isNetworkError) onNetworkError()
+        }
     }
 
     override fun onDestroyView() {
@@ -110,7 +102,7 @@ class AlbumFragment : Fragment() {
         }
     }
 
-    fun String.normalize(): String {
+    private fun String.normalize(): String {
         return Normalizer.normalize(this, Normalizer.Form.NFD)
             .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
             .lowercase(Locale.getDefault())
@@ -121,7 +113,8 @@ class AlbumFragment : Fragment() {
         val filteredAlbums = viewModel.albums.value?.filter { album ->
             album.name.normalize().contains(normalizedQuery)
         } ?: emptyList()
-        viewModelAdapter.albums = filteredAlbums
+        val sortedFilterAlbums = filteredAlbums.sortedBy { it.name }
+        viewModelAdapter.submitList(sortedFilterAlbums)
         binding.tvNoResults.visibility = if (filteredAlbums.isEmpty()) View.VISIBLE else View.GONE
     }
 }

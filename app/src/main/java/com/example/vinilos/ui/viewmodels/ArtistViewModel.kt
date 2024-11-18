@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.repositories.BandRepository
 import com.example.vinilos.data.repositories.MusicianRepository
+import kotlinx.coroutines.launch
 
 class ArtistViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -19,10 +21,10 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     private val _artists = MutableLiveData<List<Artist>>()
     val artists: LiveData<List<Artist>> get() = _artists
 
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData(false)
 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
@@ -31,23 +33,27 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadBands() {
-        bandRepository.refreshData({
-            _artists.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            try {
+                val artistList = bandRepository.refreshData()
+                _artists.postValue(artistList)
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
     }
 
     fun loadMusicians() {
-        musicianRepository.refreshData({
-            _artists.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            try {
+                val artistList = musicianRepository.refreshData()
+                _artists.postValue(artistList)
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
     }
 
     fun onNetworkErrorShown() {

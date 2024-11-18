@@ -25,6 +25,9 @@
         <activity
             android:name=".ui.views.MainActivity"
             android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.views.AlbumDetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

@@ -34,7 +34,7 @@ class ArtistListTest {
             click()
         )
 
-        onView(allOf(withId(R.id.artistTitle), withText("Artistas"))).check(matches(isDisplayed()))
+        onView(allOf(withId(R.id.tvTitle), withText("Artistas"))).check(matches(isDisplayed()))
     }
 
     @Test
@@ -50,7 +50,7 @@ class ArtistListTest {
             click()
         )
 
-        onView(allOf(withId(R.id.artistTitle), withText("Artistas"))).check(matches(isDisplayed()))
+        onView(allOf(withId(R.id.tvTitle), withText("Artistas"))).check(matches(isDisplayed()))
         onView(withId(R.id.artistRv))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
             .check(matches(hasDescendant(allOf(withId(R.id.frameArtist), isDisplayed()))))
@@ -73,7 +73,7 @@ class ArtistListTest {
             click()
         )
 
-        onView(allOf(withId(R.id.artistTitle), withText("Artistas"))).check(matches(isDisplayed()))
+        onView(allOf(withId(R.id.tvTitle), withText("Artistas"))).check(matches(isDisplayed()))
         onView(withId(R.id.artistRv))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
             .check(matches(hasDescendant(allOf(withId(R.id.frameArtist), isDisplayed()))))
