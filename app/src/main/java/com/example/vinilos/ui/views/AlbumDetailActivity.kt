@@ -1,18 +1,16 @@
 package com.example.vinilos.ui.views
 
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.vinilos.R
@@ -20,9 +18,10 @@ import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ActivityAlbumDetailBinding
 import com.example.vinilos.databinding.CustomDialogBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
-import com.example.vinilos.ui.views.adapters.CommentAdapter
-import com.example.vinilos.ui.views.adapters.PerformerAdapter
-import com.example.vinilos.ui.views.adapters.TrackAdapter
+import com.example.vinilos.ui.adapters.CommentAdapter
+import com.example.vinilos.ui.adapters.PerformerAdapter
+import com.example.vinilos.ui.adapters.TrackAdapter
+import kotlinx.coroutines.launch
 
 class AlbumDetailActivity : AppCompatActivity() {
 
@@ -39,7 +38,7 @@ class AlbumDetailActivity : AppCompatActivity() {
 
         val userType = intent.getStringExtra(Constant.USER_TYPE)
 
-        if (userType == "collector") {
+        if (userType == getString(R.string.type_collector)) {
             binding.publishButton.visibility = View.VISIBLE
             binding.labelRating.visibility = View.VISIBLE
             binding.spinnerRating.visibility = View.VISIBLE
@@ -117,39 +116,50 @@ class AlbumDetailActivity : AppCompatActivity() {
             val commentText = binding.editTextParagraph.text.toString().trim()
             val rating = binding.spinnerRating.selectedItem.toString().toIntOrNull()
 
-            if(commentText.isEmpty()){
+            if (commentText.isEmpty()) {
                 showCustomDialog(
                     message = getString(R.string.comment_error),
                     isSuccess = false
                 )
-            } else if (rating == null ){
+            } else if (rating == null) {
                 showCustomDialog(
                     message = getString(R.string.score_error),
                     isSuccess = false
                 )
             } else {
-                albumViewModel.postComment(albumId, commentText, rating)
+                lifecycleScope.launch {
+                    try {
+                        albumViewModel.postComment(albumId, commentText, rating)
 
-                binding.editTextParagraph.text.clear()
-                binding.spinnerRating.setSelection(0)
+                        // Clear the input fields after successful submission
+                        binding.editTextParagraph.text.clear()
+                        binding.spinnerRating.setSelection(0)
 
-                showCustomDialog(
-                    message = getString(R.string.success_comment),
-                    isSuccess = true
-                )
+                        showCustomDialog(
+                            message = getString(R.string.success_comment),
+                            isSuccess = true
+                        )
+                    } catch (e: Exception) {
+                        showCustomDialog(
+                            message = getString(R.string.comment_error),
+                            isSuccess = false
+                        )
+                    }
+                }
             }
         }
+
     }
 
     private fun observeAlbumData(albumId: Int) {
         albumViewModel.getAlbumById(albumId).observe(this) { album ->
             if (album != null) {
-
                 binding.album = album
 
-                performerAdapter.setPerformers(album.performers)
-                trackAdapter.setTracks(album.tracks)
-                commentAdapter.setComments(album.comments)
+                performerAdapter.submitList(album.performers)
+                trackAdapter.submitList(album.tracks)
+
+                albumViewModel.loadComments(albumId)
 
                 Glide.with(binding.root.context)
                     .load(album.cover)
@@ -160,9 +170,13 @@ class AlbumDetailActivity : AppCompatActivity() {
                 albumViewModel.setAlbum(album)
             }
         }
+        albumViewModel.comments.observe(this) { comments ->
+            commentAdapter.submitList(comments.reversed())
+            binding.rvCommentsList.visibility = if (comments.isEmpty()) View.GONE else View.VISIBLE
+        }
     }
 
-    fun showCustomDialog(message: String, isSuccess: Boolean) {
+    private fun showCustomDialog(message: String, isSuccess: Boolean) {
         val dialog = Dialog(this)
         val binding = CustomDialogBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)

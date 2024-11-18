@@ -1,19 +1,14 @@
-package com.example.vinilos.ui.views.adapters
+package com.example.vinilos.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.data.models.Track
 import com.example.vinilos.databinding.TrackAlbumDetailItemBinding
 
-class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
-
-    private var tracks: List<Track> = emptyList()
-
-    fun setTracks(newTracks: List<Track>) {
-        tracks = newTracks
-        notifyDataSetChanged()
-    }
+class TrackAdapter : ListAdapter<Track, TrackAdapter.TrackViewHolder>(TrackDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackAlbumDetailItemBinding.inflate(
@@ -23,15 +18,26 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+        val performer = getItem(position)
+        holder.bind(performer)
     }
-
-    override fun getItemCount(): Int = tracks.size
 
     class TrackViewHolder(private val binding: TrackAlbumDetailItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(track: Track) {
             binding.track = track
+        }
+    }
+
+    companion object {
+        val TrackDiffCallback = object : DiffUtil.ItemCallback<Track>() {
+            override fun areItemsTheSame(oldItem: Track, newItem: Track): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Track, newItem: Track): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

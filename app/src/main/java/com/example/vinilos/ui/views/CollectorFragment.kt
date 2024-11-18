@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.databinding.CollectorFragmentBinding
 import com.example.vinilos.ui.viewmodels.CollectorViewModel
-import com.example.vinilos.ui.views.adapters.CollectorAdapter
+import com.example.vinilos.ui.adapters.CollectorAdapter
 import java.text.Normalizer
 import java.util.Locale
 
@@ -69,7 +69,7 @@ class CollectorFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         viewModel.collectors.observe(viewLifecycleOwner) { collectorList ->
-            viewModelAdapter.collectors = collectorList
+            viewModelAdapter.submitList(collectorList)
             progressBar.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
@@ -97,7 +97,8 @@ class CollectorFragment : Fragment() {
         val filteredCollectors = viewModel.collectors.value?.filter { collector ->
             collector.name.normalize().contains(normalizedQuery)
         } ?: emptyList()
-        viewModelAdapter.collectors = filteredCollectors
+        val sortedFilterCollectors = filteredCollectors.sortedBy { it.name }
+        viewModelAdapter.submitList(sortedFilterCollectors)
         binding.tvNoResults.visibility = if (filteredCollectors.isEmpty()) View.VISIBLE else View.GONE
     }
 

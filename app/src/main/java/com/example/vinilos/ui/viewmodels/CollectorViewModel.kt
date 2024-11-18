@@ -6,9 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.vinilos.data.models.Artist
+import androidx.lifecycle.viewModelScope
 import com.example.vinilos.data.models.Collector
 import com.example.vinilos.data.repositories.CollectorRepository
+import kotlinx.coroutines.launch
 
 class CollectorViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -17,10 +18,10 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     private val _collectors = MutableLiveData<List<Collector>>()
     val collectors: LiveData<List<Collector>> get() = _collectors
 
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData(false)
 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
@@ -28,14 +29,16 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
         loadCollectors()
     }
 
-    fun loadCollectors() {
-        collectorRepository.getCollectors({
-            _collectors.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        }, {
-            _eventNetworkError.value = true
-        })
+    private fun loadCollectors() {
+        viewModelScope.launch {
+            try {
+                val collectorList = collectorRepository.getCollectors()
+                _collectors.postValue(collectorList)
+                _eventNetworkError.postValue(false)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
     }
 
     fun onNetworkErrorShown() {
