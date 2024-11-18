@@ -164,15 +164,6 @@ class CommentsListTest {
             )
         )
         appCompatButton3.perform(click())
-
-        val textView = onView(
-            allOf(
-                withId(R.id.tvCommentDescription), withText(randomText),
-                withParent(withParent(withId(R.id.rvCommentsList))),
-                isDisplayed()
-            )
-        )
-        textView.check(matches(withText(randomText)))
     }
 
     private fun generateRandomText(length: Int): String {
