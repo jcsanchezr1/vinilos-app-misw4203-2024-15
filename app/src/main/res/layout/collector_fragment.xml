@@ -29,7 +29,7 @@
         tools:ignore="MissingConstraints" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarCollector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -44,7 +44,7 @@
         android:id="@+id/tvNoResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/empty_albums"
+        android:text="@string/empty_collectors"
         android:textSize="16sp"
         android:textColor="@color/hint_text"
         android:fontFamily="@font/poppins_regular"
@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/albumRv"
+        android:id="@+id/collectorRv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"

@@ -6,26 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.databinding.ArtistFragmentBinding
-import com.example.vinilos.data.models.Artist
 import com.example.vinilos.ui.viewmodels.ArtistViewModel
-import com.example.vinilos.ui.views.adapters.ArtistAdapter
+import com.example.vinilos.ui.adapters.ArtistAdapter
 
 class ArtistFragment : Fragment() {
     private var _binding: ArtistFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: ArtistViewModel
-    private var viewModelAdapter: ArtistAdapter? = null
+    private lateinit var viewModelAdapter: ArtistAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ArtistFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         viewModelAdapter = ArtistAdapter()
@@ -56,19 +54,15 @@ class ArtistFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application)).get(
-            ArtistViewModel::class.java
-        )
-        viewModel.artists.observe(viewLifecycleOwner, Observer<List<Artist>> {
-            it.apply {
-                viewModelAdapter!!.artists = this
-            }
-        })
+        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application))[ArtistViewModel::class.java]
+        viewModel.artists.observe(viewLifecycleOwner) { albumList ->
+            viewModelAdapter.submitList(albumList)
+        }
         viewModel.eventNetworkError.observe(
-            viewLifecycleOwner,
-            Observer<Boolean> { isNetworkError ->
-                if (isNetworkError) onNetworkError()
-            })
+            viewLifecycleOwner
+        ) { isNetworkError ->
+            if (isNetworkError) onNetworkError()
+        }
     }
 
     override fun onDestroyView() {
