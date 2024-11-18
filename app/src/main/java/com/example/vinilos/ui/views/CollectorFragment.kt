@@ -1,6 +1,5 @@
 package com.example.vinilos.ui.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,41 +12,33 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vinilos.common.Constant
-import com.example.vinilos.databinding.AlbumFragmentBinding
-import com.example.vinilos.ui.viewmodels.AlbumViewModel
-import com.example.vinilos.ui.adapters.AlbumAdapter
+import com.example.vinilos.databinding.CollectorFragmentBinding
+import com.example.vinilos.ui.viewmodels.CollectorViewModel
+import com.example.vinilos.ui.adapters.CollectorAdapter
 import java.text.Normalizer
 import java.util.Locale
 
-class AlbumFragment : Fragment() {
+class CollectorFragment : Fragment() {
 
-    private var _binding: AlbumFragmentBinding? = null
+    private var _binding: CollectorFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewModel: AlbumViewModel
-    private lateinit var viewModelAdapter: AlbumAdapter
+    private lateinit var viewModel: CollectorViewModel
+    private lateinit var viewModelAdapter: CollectorAdapter
     private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = AlbumFragmentBinding.inflate(inflater, container, false)
+        _binding = CollectorFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModelAdapter = AlbumAdapter()
+        viewModelAdapter = CollectorAdapter()
 
-        val userType = arguments?.getString(Constant.USER_TYPE)
+        progressBar = binding.progressBarCollector
+        recyclerView = binding.collectorRv
 
-        viewModelAdapter.setOnItemClickListener { albumId ->
-            val intent = Intent(requireContext(), AlbumDetailActivity::class.java)
-            intent.putExtra(Constant.ALBUM_ID, albumId)
-            intent.putExtra(Constant.USER_TYPE, userType)
-            startActivity(intent)
-        }
-
-        progressBar = binding.progressBar
-        recyclerView = binding.albumRv
         return view
     }
 
@@ -57,7 +48,7 @@ class AlbumFragment : Fragment() {
 
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                filterAlbums(s.toString())
+                filterCollectors(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -72,14 +63,13 @@ class AlbumFragment : Fragment() {
         }
         viewModel = ViewModelProvider(
             this,
-            AlbumViewModel.Factory(activity.application)
-        )[AlbumViewModel::class.java]
+            CollectorViewModel.Factory(activity.application)
+        )[CollectorViewModel::class.java]
 
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        viewModel.albums.observe(viewLifecycleOwner) { albumList ->
-            val sortedAlbums = albumList.sortedBy { it.name }
-            viewModelAdapter.submitList(sortedAlbums)
+        viewModel.collectors.observe(viewLifecycleOwner) { collectorList ->
+            viewModelAdapter.submitList(collectorList)
             progressBar.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
@@ -102,19 +92,20 @@ class AlbumFragment : Fragment() {
         }
     }
 
+    private fun filterCollectors(query: String) {
+        val normalizedQuery = query.normalize()
+        val filteredCollectors = viewModel.collectors.value?.filter { collector ->
+            collector.name.normalize().contains(normalizedQuery)
+        } ?: emptyList()
+        val sortedFilterCollectors = filteredCollectors.sortedBy { it.name }
+        viewModelAdapter.submitList(sortedFilterCollectors)
+        binding.tvNoResults.visibility = if (filteredCollectors.isEmpty()) View.VISIBLE else View.GONE
+    }
+
     private fun String.normalize(): String {
         return Normalizer.normalize(this, Normalizer.Form.NFD)
             .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
             .lowercase(Locale.getDefault())
     }
 
-    private fun filterAlbums(query: String) {
-        val normalizedQuery = query.normalize()
-        val filteredAlbums = viewModel.albums.value?.filter { album ->
-            album.name.normalize().contains(normalizedQuery)
-        } ?: emptyList()
-        val sortedFilterAlbums = filteredAlbums.sortedBy { it.name }
-        viewModelAdapter.submitList(sortedFilterAlbums)
-        binding.tvNoResults.visibility = if (filteredAlbums.isEmpty()) View.VISIBLE else View.GONE
-    }
 }

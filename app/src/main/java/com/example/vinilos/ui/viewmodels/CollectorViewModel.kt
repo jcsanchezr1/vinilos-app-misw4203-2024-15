@@ -7,19 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.vinilos.data.models.Artist
-import com.example.vinilos.data.repositories.BandRepository
-import com.example.vinilos.data.repositories.MusicianRepository
+import com.example.vinilos.data.models.Collector
+import com.example.vinilos.data.repositories.CollectorRepository
 import kotlinx.coroutines.launch
 
-class ArtistViewModel(application: Application) : AndroidViewModel(application) {
+class CollectorViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val bandRepository = BandRepository(application)
+    private val collectorRepository = CollectorRepository(application)
 
-    private val musicianRepository = MusicianRepository(application)
-
-    private val _artists = MutableLiveData<List<Artist>>()
-    val artists: LiveData<List<Artist>> get() = _artists
+    private val _collectors = MutableLiveData<List<Collector>>()
+    val collectors: LiveData<List<Collector>> get() = _collectors
 
     private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
@@ -29,26 +26,14 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
     init {
-        loadMusicians()
+        loadCollectors()
     }
 
-    fun loadBands() {
+    private fun loadCollectors() {
         viewModelScope.launch {
             try {
-                val artistList = bandRepository.refreshData()
-                _artists.postValue(artistList)
-                _eventNetworkError.postValue(false)
-            } catch (e: Exception) {
-                _eventNetworkError.postValue(true)
-            }
-        }
-    }
-
-    fun loadMusicians() {
-        viewModelScope.launch {
-            try {
-                val artistList = musicianRepository.refreshData()
-                _artists.postValue(artistList)
+                val collectorList = collectorRepository.getCollectors()
+                _collectors.postValue(collectorList)
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)
@@ -62,9 +47,9 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
 
     class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(ArtistViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(CollectorViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return ArtistViewModel(app) as T
+                return CollectorViewModel(app) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
