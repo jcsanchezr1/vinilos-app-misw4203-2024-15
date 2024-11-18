@@ -12,9 +12,5 @@ class AlbumRepository(context: Context) {
     suspend fun getAlbums(): List<Album> {
         return networkServiceAdapter.getAlbums()
     }
-
-    suspend fun postComment(albumId: Int, comment: Comment): Comment {
-        return networkServiceAdapter.postComment(albumId, comment)
-    }
 }
 

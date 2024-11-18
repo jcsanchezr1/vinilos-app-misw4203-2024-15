@@ -16,18 +16,18 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class NetworkServiceAdapter(context: Context) {
+class NetworkServiceAdapter(private val applicationContext: Context) {
     companion object {
         const val BASE_URL = "https://api-backvynils-misw4203-600c0ea84373.herokuapp.com/"
         private var instance: NetworkServiceAdapter? = null
         fun getInstance(context: Context) =
             instance ?: synchronized(this) {
-                instance ?: NetworkServiceAdapter(context).also { instance = it }
+                instance ?: NetworkServiceAdapter(context.applicationContext).also { instance = it }
             }
     }
 
     private val requestQueue: RequestQueue by lazy {
-        Volley.newRequestQueue(context.applicationContext)
+        Volley.newRequestQueue(applicationContext)
     }
 
     private suspend fun getRequest(path: String): String = suspendCoroutine { cont ->
@@ -104,8 +104,24 @@ class NetworkServiceAdapter(context: Context) {
         return list.sortedBy { it.name }
     }
 
+    suspend fun getComments(albumId: Int): List<Comment> {
+
+        val cachedComments = CacheManager.getInstance(applicationContext).getComments(albumId)
+        if (cachedComments.isNotEmpty()) {
+            return cachedComments
+        }
+
+        val response = getRequest("albums/$albumId/comments")
+        val comments = parseComments(response)
+
+        CacheManager.getInstance(applicationContext).addComments(albumId, comments)
+
+        return comments
+    }
+
     suspend fun postComment(albumId: Int, comment: Comment): Comment {
         val path = "albums/$albumId/comments"
+
         val requestBody = JSONObject().apply {
             put("description", comment.description)
             put("rating", comment.rating)
@@ -113,15 +129,13 @@ class NetworkServiceAdapter(context: Context) {
         }
 
         val response = postRequest(path, requestBody)
-        val jsonResponse = JSONObject(response)
+        val postedComment = parseComment(response)
 
-        return Comment(
-            id = jsonResponse.getInt("id"),
-            description = jsonResponse.getString("description"),
-            rating = jsonResponse.getInt("rating"),
-            collector = 100
-        )
+        CacheManager.getInstance(applicationContext).addComments(albumId, listOf(postedComment))
+
+        return postedComment
     }
+
 
     suspend fun getCollectors(): List<Collector> {
         val response = getRequest("collectors")
@@ -149,7 +163,6 @@ class NetworkServiceAdapter(context: Context) {
 
         return musicians.sortedBy { it.name }
     }
-
 
     private fun parseCollectors(response: String): List<Collector> {
         val jsonArray = JSONArray(response)
@@ -230,5 +243,60 @@ class NetworkServiceAdapter(context: Context) {
             performers = performers,
             comments = comments
         )
+    }
+
+    private fun parseComments(response: String): List<Comment> {
+        val jsonArray = JSONArray(response)
+        val comments = mutableListOf<Comment>()
+
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            comments.add(
+                Comment(
+                    id = jsonObject.getInt("id"),
+                    description = jsonObject.getString("description"),
+                    rating = jsonObject.getInt("rating"),
+                    collector = 100
+                )
+            )
+        }
+
+        return comments
+    }
+
+    private fun parseComment(response: String): Comment {
+        val jsonObject = JSONObject(response)
+        return Comment(
+            id = jsonObject.getInt("id"),
+            description = jsonObject.getString("description"),
+            rating = jsonObject.getInt("rating"),
+            collector = 100
+        )
+    }
+}
+
+class CacheManager(applicationContext: Context) {
+    companion object{
+        private var instance: CacheManager? = null
+        fun getInstance(context: Context) =
+            instance ?: synchronized(this) {
+                instance ?: CacheManager(context.applicationContext).also {
+                    instance = it
+                }
+            }
+    }
+    private var comments: HashMap<Int, List<Comment>> = hashMapOf()
+    fun addComments(albumId: Int, newComments: List<Comment>) {
+        if (comments.containsKey(albumId)) {
+            val existingComments = comments[albumId]?.toMutableList() ?: mutableListOf()
+            existingComments.addAll(newComments)
+            comments[albumId] = existingComments
+        } else {
+            comments[albumId] = newComments
+        }
+    }
+
+    fun getComments(albumId: Int) : List<Comment>{
+        return if (comments.containsKey(albumId)) comments[albumId]!! else listOf()
     }
 }

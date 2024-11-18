@@ -154,12 +154,12 @@ class AlbumDetailActivity : AppCompatActivity() {
     private fun observeAlbumData(albumId: Int) {
         albumViewModel.getAlbumById(albumId).observe(this) { album ->
             if (album != null) {
-
                 binding.album = album
 
                 performerAdapter.submitList(album.performers)
                 trackAdapter.submitList(album.tracks)
-                commentAdapter.submitList(album.comments.reversed())
+
+                albumViewModel.loadComments(albumId)
 
                 Glide.with(binding.root.context)
                     .load(album.cover)
@@ -169,6 +169,10 @@ class AlbumDetailActivity : AppCompatActivity() {
 
                 albumViewModel.setAlbum(album)
             }
+        }
+        albumViewModel.comments.observe(this) { comments ->
+            commentAdapter.submitList(comments.reversed())
+            binding.rvCommentsList.visibility = if (comments.isEmpty()) View.GONE else View.VISIBLE
         }
     }
 
