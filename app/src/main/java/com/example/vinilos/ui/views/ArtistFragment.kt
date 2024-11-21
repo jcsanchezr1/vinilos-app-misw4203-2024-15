@@ -1,5 +1,6 @@
 package com.example.vinilos.ui.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,14 @@ class ArtistFragment : Fragment() {
     ): View {
         _binding = ArtistFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModelAdapter = ArtistAdapter()
+
+        // Initialize adapter with click listener
+        viewModelAdapter = ArtistAdapter { artist ->
+            val intent = Intent(requireContext(), ArtistDetailActivity::class.java)
+            intent.putExtra("artistId", artist.id)
+            startActivity(intent)
+        }
+
         binding.musiciansButton.isSelected = true
         return view
     }
@@ -55,12 +63,14 @@ class ArtistFragment : Fragment() {
             "You can only access the viewModel after onActivityCreated()"
         }
         viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application))[ArtistViewModel::class.java]
-        viewModel.artists.observe(viewLifecycleOwner) { albumList ->
-            viewModelAdapter.submitList(albumList)
+
+        // Observe artists data
+        viewModel.artists.observe(viewLifecycleOwner) { artistList ->
+            viewModelAdapter.submitList(artistList)
         }
-        viewModel.eventNetworkError.observe(
-            viewLifecycleOwner
-        ) { isNetworkError ->
+
+        // Handle network errors
+        viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
         }
     }

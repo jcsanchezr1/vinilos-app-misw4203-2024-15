@@ -12,7 +12,7 @@ import com.example.vinilos.R
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.databinding.ArtistItemBinding
 
-class ArtistAdapter : ListAdapter<Artist, ArtistAdapter.ArtistViewHolder>(ArtistDiffCallback) {
+class ArtistAdapter(private val clickListener: (Artist) -> Unit) : ListAdapter<Artist, ArtistAdapter.ArtistViewHolder>(ArtistDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val withDataBinding: ArtistItemBinding = DataBindingUtil.inflate(
@@ -33,6 +33,10 @@ class ArtistAdapter : ListAdapter<Artist, ArtistAdapter.ArtistViewHolder>(Artist
             .placeholder(R.drawable.album_placeholder)
             .error(R.drawable.album_placeholder)
             .into(holder.viewDataBinding.ivArtistImage)
+
+        holder.itemView.setOnClickListener {
+            clickListener(artist)
+        }
     }
 
     class ArtistViewHolder(val viewDataBinding: ArtistItemBinding) :
