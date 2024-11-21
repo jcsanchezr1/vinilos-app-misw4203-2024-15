@@ -86,7 +86,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
             val item = resp.getJSONObject(i)
             list.add(parseMusicians(item))
         }
-        return list
+        return list.sortedBy { it.name }
     }
 
 
@@ -97,17 +97,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
         for (i in 0 until resp.length()) {
             val item = resp.getJSONObject(i)
-            list.add(
-                Artist(
-                    id = item.getInt("id"),
-                    name = item.getString("name"),
-                    image = item.getString("image"),
-                    description = item.getString("description"),
-                    creationDate = item.getString("creationDate"),
-                    albums = emptyList(),
-                    type = Artist.ArtistType.BAND
-                )
-            )
+            list.add(parseBands(item))
         }
         return list.sortedBy { it.name }
     }
@@ -144,7 +134,6 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
         return postedComment
     }
 
-
     suspend fun getCollectors(): List<Collector> {
         val response = getRequest("collectors")
         return parseCollectors(response)
@@ -171,6 +160,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
         return collectors
     }
+
     private fun parseMusicians(item: JSONObject): Artist {
         val albumsArray = item.getJSONArray("albums")
         val albums = mutableListOf<Album>()
@@ -198,9 +188,42 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
             name = item.getString("name"),
             image = item.getString("image"),
             description = item.getString("description"),
-            creationDate = "",
+            creationDate = item.getString("birthDate"),
             albums = albums,
             type = Artist.ArtistType.MUSICIAN
+        )
+    }
+
+    private fun parseBands(item: JSONObject): Artist {
+        val albumsArray = item.getJSONArray("albums")
+        val albums = mutableListOf<Album>()
+        for (j in 0 until albumsArray.length()) {
+            val albumItem = albumsArray.getJSONObject(j)
+            albums.add(
+                Album(
+                    id = albumItem.getInt("id"),
+                    name = albumItem.getString("name"),
+                    cover = albumItem.getString("cover"),
+                    description = albumItem.getString("description"),
+                    releaseDate = albumItem.getString("releaseDate"),
+                    genre = albumItem.getString("genre"),
+                    recordLabel = albumItem.getString("recordLabel"),
+                    tracks = emptyList(),
+                    performers = emptyList(),
+                    comments = emptyList()
+                )
+            )
+        }
+
+
+        return Artist(
+            id = item.getInt("id"),
+            name = item.getString("name"),
+            image = item.getString("image"),
+            description = item.getString("description"),
+            creationDate = item.getString("creationDate"),
+            albums = albums,
+            type = Artist.ArtistType.BAND
         )
     }
 

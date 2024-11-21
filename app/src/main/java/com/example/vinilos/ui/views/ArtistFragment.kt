@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ArtistFragmentBinding
 import com.example.vinilos.ui.viewmodels.ArtistViewModel
 import com.example.vinilos.ui.adapters.ArtistAdapter
@@ -28,10 +29,9 @@ class ArtistFragment : Fragment() {
         _binding = ArtistFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // Initialize adapter with click listener
         viewModelAdapter = ArtistAdapter { artist ->
             val intent = Intent(requireContext(), ArtistDetailActivity::class.java)
-            intent.putExtra("artistId", artist.id)
+            intent.putExtra(Constant.ARTIST_ID, artist.id)
             startActivity(intent)
         }
 
@@ -64,12 +64,10 @@ class ArtistFragment : Fragment() {
         }
         viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application))[ArtistViewModel::class.java]
 
-        // Observe artists data
         viewModel.artists.observe(viewLifecycleOwner) { artistList ->
             viewModelAdapter.submitList(artistList)
         }
 
-        // Handle network errors
         viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
         }

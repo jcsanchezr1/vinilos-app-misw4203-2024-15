@@ -1,16 +1,22 @@
 package com.example.vinilos.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.repositories.BandRepository
 import com.example.vinilos.data.repositories.MusicianRepository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class ArtistViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -53,6 +59,36 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)
             }
+        }
+    }
+
+    fun getArtistById(id: Int): LiveData<Artist?> {
+        val result = MediatorLiveData<Artist?>()
+        result.addSource(_artists) { artists ->
+            result.value = artists?.find { it.id == id }
+        }
+        return result
+    }
+
+    fun formatDate(dateString: String?): String {
+        Log.d("DateFormat", "Received date: $dateString")
+
+        return try {
+
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            val outputFormat = SimpleDateFormat("MMMM dd 'de' yyyy", Locale("es", "CO"))
+
+            val date = dateString?.let { inputFormat.parse(it) }
+            val formattedDate = outputFormat.format(date!!)
+
+            val formattedDateWithCapitalMonth = formattedDate.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
+            formattedDateWithCapitalMonth
+        } catch (e: Exception) {
+
+            "Fecha inválida"
         }
     }
 
