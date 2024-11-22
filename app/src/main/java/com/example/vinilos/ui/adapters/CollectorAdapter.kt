@@ -31,12 +31,6 @@ class CollectorAdapter(private val onCollectorClick: (Collector) -> Unit) :
         holder.viewDataBinding.root.setOnClickListener {
             onCollectorClick(collector)
         }
-
-        Glide.with(holder.itemView.context)
-            .load(R.drawable.) // Replace with collector's image if available
-            .placeholder(R.drawable.album_placeholder)
-            .error(R.drawable.album_placeholder)
-            .into(holder.viewDataBinding.)
     }
 
     class CollectorViewHolder(val viewDataBinding: CollectorItemBinding) :
