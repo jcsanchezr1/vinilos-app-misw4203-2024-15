@@ -170,21 +170,74 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
         for (i in 0 until jsonArray.length()) {
             val jsonObject = jsonArray.getJSONObject(i)
+
+            val commentsArray = jsonObject.getJSONArray("comments")
+            val comments = mutableListOf<Comment>()
+            for (j in 0 until commentsArray.length()) {
+                val commentObject = commentsArray.getJSONObject(j)
+                comments.add(
+                    Comment(
+                        id = commentObject.getInt("id"),
+                        description = commentObject.getString("description"),
+                        rating = commentObject.getInt("rating"),
+                        collector = jsonObject.getInt("id")
+                    )
+                )
+            }
+
+            val performersArray = jsonObject.getJSONArray("favoritePerformers")
+            val favoritePerformers = mutableListOf<Artist>()
+            for (j in 0 until performersArray.length()) {
+                val performerObject = performersArray.getJSONObject(j)
+                favoritePerformers.add(
+                    Artist(
+                        id = performerObject.getInt("id"),
+                        name = performerObject.getString("name"),
+                        image = performerObject.getString("image"),
+                        description = performerObject.getString("description"),
+                        creationDate = performerObject.optString("creationDate", ""),
+                        albums = emptyList(),
+                        type = if (performerObject.getString("type") == "BAND") Artist.ArtistType.BAND else Artist.ArtistType.MUSICIAN
+                    )
+                )
+            }
+
+            val albumsArray = jsonObject.getJSONArray("collectorAlbums")
+            val collectorAlbums = mutableListOf<Album>()
+            for (j in 0 until albumsArray.length()) {
+                val albumObject = albumsArray.getJSONObject(j)
+                collectorAlbums.add(
+                    Album(
+                        id = albumObject.getInt("id"),
+                        name = albumObject.getString("name"),
+                        cover = albumObject.getString("cover"),
+                        description = albumObject.getString("description"),
+                        releaseDate = albumObject.getString("releaseDate"),
+                        genre = albumObject.getString("genre"),
+                        recordLabel = albumObject.getString("recordLabel"),
+                        tracks = emptyList(),
+                        performers = emptyList(),
+                        comments = emptyList()
+                    )
+                )
+            }
+
             collectors.add(
                 Collector(
                     id = jsonObject.getInt("id"),
                     name = jsonObject.getString("name"),
                     telephone = jsonObject.getString("telephone"),
                     email = jsonObject.getString("email"),
-                    comments = emptyList(),
-                    favoritePerformers = emptyList(),
-                    collectorAlbums = emptyList(),
+                    comments = comments,
+                    favoritePerformers = favoritePerformers,
+                    collectorAlbums = collectorAlbums
                 )
             )
         }
 
         return collectors
     }
+
 
     private fun parseAlbum(item: JSONObject): Album {
         val tracksArray = item.getJSONArray("tracks")

@@ -23,7 +23,6 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
     private var _isNetworkErrorShown = MutableLiveData(false)
-
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
     init {
