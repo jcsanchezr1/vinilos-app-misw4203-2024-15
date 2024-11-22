@@ -18,7 +18,6 @@ class ArtistDetailActivity : AppCompatActivity() {
     private lateinit var albumAdapter: AlbumAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityArtistDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -33,7 +32,14 @@ class ArtistDetailActivity : AppCompatActivity() {
         binding.viewModel = artistViewModel
 
         val artistId = intent.getIntExtra(Constant.ARTIST_ID, -1)
-        observeArtistData(artistId)
+        val artistTypeString = intent.getStringExtra(Constant.ARTIST_TYPE)
+        val artistType = when (artistTypeString) {
+            "MUSICIAN" -> ArtistViewModel.ArtistType.MUSICIAN
+            "BAND" -> ArtistViewModel.ArtistType.BAND
+            else -> throw IllegalArgumentException("Invalid artist type")
+        }
+
+        observeArtistData(artistId, artistType)
 
         binding.rvAlbumsList.apply {
             layoutManager = LinearLayoutManager(this@ArtistDetailActivity)
@@ -43,11 +49,10 @@ class ArtistDetailActivity : AppCompatActivity() {
         binding.btnArtistDetailBack.setOnClickListener {
             finish()
         }
-
     }
 
-    private fun observeArtistData(artistId: Int) {
-        artistViewModel.getArtistById(artistId).observe(this) { artist ->
+    private fun observeArtistData(artistId: Int, artistType: ArtistViewModel.ArtistType) {
+        artistViewModel.getArtistById(artistId, artistType).observe(this) { artist ->
             if (artist != null) {
                 binding.artist = artist
 
@@ -58,8 +63,10 @@ class ArtistDetailActivity : AppCompatActivity() {
                     .placeholder(R.drawable.album_placeholder)
                     .error(R.drawable.album_placeholder)
                     .into(binding.ivArtistDetailCover)
+
+                binding.tvAlbumDetailDescription.text = artist.description
+                binding.tvDate.text = artistViewModel.formatDate(artist.creationDate)
             }
         }
     }
-
 }

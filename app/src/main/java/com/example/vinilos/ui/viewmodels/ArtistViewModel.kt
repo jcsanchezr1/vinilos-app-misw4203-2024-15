@@ -35,13 +35,17 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
     init {
-        loadMusicians()
+        loadArtists(ArtistType.MUSICIAN)
     }
 
-    fun loadBands() {
+
+    fun loadArtists(type: ArtistType) {
         viewModelScope.launch {
             try {
-                val artistList = bandRepository.refreshData()
+                val artistList = when (type) {
+                    ArtistType.MUSICIAN -> musicianRepository.refreshData()
+                    ArtistType.BAND -> bandRepository.refreshData()
+                }
                 _artists.postValue(artistList)
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
@@ -50,23 +54,22 @@ class ArtistViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun loadMusicians() {
-        viewModelScope.launch {
-            try {
-                val artistList = musicianRepository.refreshData()
-                _artists.postValue(artistList)
-                _eventNetworkError.postValue(false)
-            } catch (e: Exception) {
-                _eventNetworkError.postValue(true)
-            }
-        }
+    enum class ArtistType {
+        MUSICIAN, BAND
     }
 
-    fun getArtistById(id: Int): LiveData<Artist?> {
+
+    fun getArtistById(id: Int, type: ArtistType): LiveData<Artist?> {
         val result = MediatorLiveData<Artist?>()
+
+        if (_artists.value.isNullOrEmpty()) {
+            loadArtists(type)
+        }
+
         result.addSource(_artists) { artists ->
             result.value = artists?.find { it.id == id }
         }
+
         return result
     }
 

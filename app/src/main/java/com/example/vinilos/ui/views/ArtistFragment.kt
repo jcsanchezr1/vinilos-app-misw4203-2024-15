@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ArtistFragmentBinding
-import com.example.vinilos.ui.viewmodels.ArtistViewModel
 import com.example.vinilos.ui.adapters.ArtistAdapter
+import com.example.vinilos.ui.viewmodels.ArtistViewModel
 
 class ArtistFragment : Fragment() {
     private var _binding: ArtistFragmentBinding? = null
@@ -21,6 +21,7 @@ class ArtistFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: ArtistViewModel
     private lateinit var viewModelAdapter: ArtistAdapter
+    private var currentType: ArtistViewModel.ArtistType = ArtistViewModel.ArtistType.MUSICIAN
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +33,7 @@ class ArtistFragment : Fragment() {
         viewModelAdapter = ArtistAdapter { artist ->
             val intent = Intent(requireContext(), ArtistDetailActivity::class.java)
             intent.putExtra(Constant.ARTIST_ID, artist.id)
+            intent.putExtra(Constant.ARTIST_TYPE, if (binding.musiciansButton.isSelected) "MUSICIAN" else "BAND")
             startActivity(intent)
         }
 
@@ -45,15 +47,17 @@ class ArtistFragment : Fragment() {
         recyclerView.adapter = viewModelAdapter
 
         binding.musiciansButton.setOnClickListener {
+            currentType = ArtistViewModel.ArtistType.MUSICIAN
             binding.musiciansButton.isSelected = true
             binding.bandsButton.isSelected = false
-            viewModel.loadMusicians()
+            viewModel.loadArtists(ArtistViewModel.ArtistType.MUSICIAN)
         }
 
         binding.bandsButton.setOnClickListener {
+            currentType = ArtistViewModel.ArtistType.BAND
             binding.bandsButton.isSelected = true
             binding.musiciansButton.isSelected = false
-            viewModel.loadBands()
+            viewModel.loadArtists(ArtistViewModel.ArtistType.BAND)
         }
     }
 
@@ -71,6 +75,8 @@ class ArtistFragment : Fragment() {
         viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
         }
+
+        viewModel.loadArtists(currentType)
     }
 
     override fun onDestroyView() {
