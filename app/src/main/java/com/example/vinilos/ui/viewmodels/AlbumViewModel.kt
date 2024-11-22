@@ -116,6 +116,19 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun createAlbum(newAlbum: Album) {
+        viewModelScope.launch {
+            try {
+                val createdAlbum = albumRepository.createAlbum(newAlbum)
+                val updatedAlbums = _albums.value?.toMutableList() ?: mutableListOf()
+                updatedAlbums.add(createdAlbum)
+                _albums.postValue(updatedAlbums)
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
+            }
+        }
+    }
+
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AlbumViewModel::class.java)) {

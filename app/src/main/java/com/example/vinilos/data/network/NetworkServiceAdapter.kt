@@ -77,6 +77,22 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
         return list
     }
 
+    suspend fun postAlbum(newAlbum: Album): Album {
+        val path = "albums"
+
+        val requestBody = JSONObject().apply {
+            put("name", newAlbum.name)
+            put("cover", newAlbum.cover)
+            put("releaseDate", newAlbum.releaseDate)
+            put("description", newAlbum.description)
+            put("genre", newAlbum.genre)
+            put("recordLabel", newAlbum.recordLabel)
+        }
+
+        val response = postRequest(path, requestBody)
+        return parseAlbum(JSONObject(response))
+    }
+
     suspend fun getMusicians(): List<Artist> {
         val response = getRequest("musicians")
         return parseMusicians(response)
