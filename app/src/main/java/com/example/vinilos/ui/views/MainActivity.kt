@@ -69,6 +69,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.headerLayout.ivAdd.setOnClickListener {
+            val intent = Intent(this, CreateAlbumActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun loadFragment(fragment: Fragment, userType: String) {
