@@ -4,7 +4,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +34,25 @@ class CreateAlbumActivity : AppCompatActivity() {
 
         val etDescription = binding.etAlbumDescription
         val charCounter = binding.charCounterDescription
+
+        val adapterGenre = ArrayAdapter.createFromResource(
+            this,
+            R.array.genre_options,
+            R.layout.score_item
+        ).apply {
+            setDropDownViewResource(R.layout.score_item_dropdown)
+        }
+
+        val adapterRecrdLabel = ArrayAdapter.createFromResource(
+            this,
+            R.array.recordLabel_options,
+            R.layout.score_item
+        ).apply {
+            setDropDownViewResource(R.layout.score_item_dropdown)
+        }
+
+        binding.spinnerGenre.adapter = adapterGenre
+        binding.spinnerRecordLabel.adapter = adapterRecrdLabel
 
         etDescription.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -83,17 +102,23 @@ class CreateAlbumActivity : AppCompatActivity() {
             val cover = binding.etAlbumCover.text.toString().trim()
             val releaseDate = binding.etAlbumReleaseDate.text.toString().trim()
             val description = binding.etAlbumDescription.text.toString().trim()
-            val genre = binding.etAlbumGenre.text.toString().trim()
-            val recordLabel = binding.etAlbumRecordLabel.text.toString().trim()
+            val genre = binding.spinnerGenre.selectedItem.toString()
+            val recordLabel = binding.spinnerRecordLabel.selectedItem.toString()
+
+            val inputFormat = SimpleDateFormat("MMMM dd, yyyy", Locale("es", "CO"))
+            val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale("es", "CO"))
+            val parsedDate = inputFormat.parse(releaseDate)
+            val apiDate = outputFormat.format(parsedDate!!)
+            val dateWithTimeZone = apiDate.substring(0, apiDate.length - 2) + ":" + apiDate.substring(apiDate.length - 2)
 
             if (name.isNotEmpty() && cover.isNotEmpty() && releaseDate.isNotEmpty()
-                && description.isNotEmpty() && genre.isNotEmpty() && recordLabel.isNotEmpty()
+                && description.isNotEmpty() && genre != "Selecciona un género" && recordLabel != "Selecciona una opción"
             ) {
                 val newAlbum = Album(
                     id = 0,
                     name = name,
                     cover = cover,
-                    releaseDate = releaseDate,
+                    releaseDate = dateWithTimeZone,
                     description = description,
                     genre = genre,
                     recordLabel = recordLabel,
@@ -102,6 +127,7 @@ class CreateAlbumActivity : AppCompatActivity() {
                     comments = emptyList()
                 )
                 albumViewModel.createAlbum(newAlbum)
+                finish()
 
             } else {
                 Toast.makeText(this, "Todos los campos son requeridos", Toast.LENGTH_SHORT).show()

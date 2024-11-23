@@ -196,20 +196,16 @@
                 app:layout_constraintTop_toBottomOf="@id/flDescriptoin"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/etAlbumGenre"
+            <Spinner
+                android:id="@+id/spinnerGenre"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:autofillHints=""
-                android:background="@drawable/search_field_style"
-                android:gravity="center_vertical"
-                android:inputType="textCapSentences"
-                android:paddingHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/color_text"
-                android:textSize="12sp"
-                android:fontFamily="@font/poppins_regular"
-                app:layout_constraintTop_toBottomOf="@id/labelGenre"/>
+                android:background="@drawable/spinner_background"
+                android:paddingHorizontal="16dp"
+                app:layout_constraintTop_toBottomOf="@id/labelGenre"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/labelRecordLabel"
@@ -221,23 +217,19 @@
                 android:labelFor="@+id/etAlbumRecordLabel"
                 android:textSize="12sp"
                 android:fontFamily="@font/poppins_medium"
-                app:layout_constraintTop_toBottomOf="@id/etAlbumGenre"
+                app:layout_constraintTop_toBottomOf="@id/spinnerGenre"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/etAlbumRecordLabel"
+            <Spinner
+                android:id="@+id/spinnerRecordLabel"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:autofillHints=""
-                android:background="@drawable/search_field_style"
-                android:gravity="center_vertical"
-                android:inputType="textCapSentences"
-                android:paddingHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/color_text"
-                android:textSize="12sp"
-                android:fontFamily="@font/poppins_regular"
-                app:layout_constraintTop_toBottomOf="@id/labelRecordLabel"/>
+                android:background="@drawable/spinner_background"
+                android:paddingHorizontal="16dp"
+                app:layout_constraintTop_toBottomOf="@id/labelRecordLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <Button
                 android:id="@+id/btnSubmitAlbum"
@@ -245,7 +237,7 @@
                 android:layout_marginTop="56dp"
                 android:layout_marginBottom="24dp"
                 style="@style/CustomButtonStyle"
-                app:layout_constraintTop_toBottomOf="@id/etAlbumRecordLabel"
+                app:layout_constraintTop_toBottomOf="@id/spinnerRecordLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 

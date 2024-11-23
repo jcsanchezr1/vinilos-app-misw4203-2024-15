@@ -48,4 +48,19 @@
     <string name="create_album_genre">Género</string>
     <string name="create_album_recordLabel">Sello discográfico</string>
     <string name="create_album_button">Crear álbum</string>
+    <string-array name="genre_options">
+        <item>Selecciona un género</item>
+        <item>Classical</item>
+        <item>Salsa</item>
+        <item>Rock</item>
+        <item>Folk</item>
+    </string-array>
+    <string-array name="recordLabel_options">
+        <item>Selecciona una opción</item>
+        <item>Sony Music</item>
+        <item>EMI</item>
+        <item>Discos Fuentes</item>
+        <item>Elektra</item>
+        <item>Fania Records</item>
+    </string-array>
 </resources>
