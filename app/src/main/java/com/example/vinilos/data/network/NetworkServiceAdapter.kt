@@ -1,6 +1,7 @@
 package com.example.vinilos.data.network
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
@@ -95,8 +96,16 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
     suspend fun getMusicians(): List<Artist> {
         val response = getRequest("musicians")
-        return parseMusicians(response)
+        val resp = JSONArray(response)
+        val list = mutableListOf<Artist>()
+
+        for (i in 0 until resp.length()) {
+            val item = resp.getJSONObject(i)
+            list.add(parseMusicians(item))
+        }
+        return list.sortedBy { it.name }
     }
+
 
     suspend fun getBands(): List<Artist> {
         val response = getRequest("bands")
@@ -105,17 +114,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
         for (i in 0 until resp.length()) {
             val item = resp.getJSONObject(i)
-            list.add(
-                Artist(
-                    id = item.getInt("id"),
-                    name = item.getString("name"),
-                    image = item.getString("image"),
-                    description = item.getString("description"),
-                    creationDate = item.getString("creationDate"),
-                    albums = emptyList(),
-                    type = Artist.ArtistType.BAND
-                )
-            )
+            list.add(parseBands(item))
         }
         return list.sortedBy { it.name }
     }
@@ -152,32 +151,9 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
         return postedComment
     }
 
-
     suspend fun getCollectors(): List<Collector> {
         val response = getRequest("collectors")
         return parseCollectors(response)
-    }
-
-    private fun parseMusicians(response: String): List<Artist> {
-        val jsonArray = JSONArray(response)
-        val musicians = mutableListOf<Artist>()
-
-        for (i in 0 until jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            musicians.add(
-                Artist(
-                    id = jsonObject.getInt("id"),
-                    name = jsonObject.getString("name"),
-                    image = jsonObject.getString("image"),
-                    description = jsonObject.getString("description"),
-                    creationDate = jsonObject.getString("birthDate"),
-                    albums = emptyList(),
-                    type = Artist.ArtistType.MUSICIAN
-                )
-            )
-        }
-
-        return musicians.sortedBy { it.name }
     }
 
     private fun parseCollectors(response: String): List<Collector> {
@@ -186,20 +162,124 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
         for (i in 0 until jsonArray.length()) {
             val jsonObject = jsonArray.getJSONObject(i)
+
+            val commentsArray = jsonObject.optJSONArray("comments") ?: JSONArray()
+            val comments = mutableListOf<Comment>()
+            for (j in 0 until commentsArray.length()) {
+                val commentObject = commentsArray.getJSONObject(j)
+                comments.add(
+                    Comment(
+                        id = commentObject.getInt("id"),
+                        description = commentObject.getString("description"),
+                        rating = commentObject.getInt("rating"),
+                        collector = jsonObject.getInt("id")
+                    )
+                )
+            }
+
+            val performersArray = jsonObject.optJSONArray("favoritePerformers") ?: JSONArray()
+            val favoritePerformers = mutableListOf<Artist>()
+            for (j in 0 until performersArray.length()) {
+                val performerObject = performersArray.getJSONObject(j)
+                val isBand = performerObject.has("creationDate")
+                val artistType = if (isBand) Artist.ArtistType.BAND else Artist.ArtistType.MUSICIAN
+                val date = if (isBand) {
+                    performerObject.getString("creationDate")
+                } else {
+                    performerObject.getString("birthDate")
+                }
+                favoritePerformers.add(
+                    Artist(
+                        id = performerObject.getInt("id"),
+                        name = performerObject.getString("name"),
+                        image = performerObject.getString("image"),
+                        description = performerObject.getString("description"),
+                        creationDate = date,
+                        albums = emptyList(),
+                        type = artistType
+                    )
+                )
+            }
+
             collectors.add(
                 Collector(
                     id = jsonObject.getInt("id"),
                     name = jsonObject.getString("name"),
                     telephone = jsonObject.getString("telephone"),
                     email = jsonObject.getString("email"),
-                    comments = emptyList(),
-                    favoritePerformers = emptyList(),
-                    collectorAlbums = emptyList(),
+                    comments = comments,
+                    favoritePerformers = favoritePerformers
                 )
             )
         }
 
-        return collectors
+        return collectors.sortedBy { it.name }
+    }
+
+    private fun parseMusicians(item: JSONObject): Artist {
+        val albumsArray = item.getJSONArray("albums")
+        val albums = mutableListOf<Album>()
+        for (j in 0 until albumsArray.length()) {
+            val albumItem = albumsArray.getJSONObject(j)
+            albums.add(
+                Album(
+                    id = albumItem.getInt("id"),
+                    name = albumItem.getString("name"),
+                    cover = albumItem.getString("cover"),
+                    description = albumItem.getString("description"),
+                    releaseDate = albumItem.getString("releaseDate"),
+                    genre = albumItem.getString("genre"),
+                    recordLabel = albumItem.getString("recordLabel"),
+                    tracks = emptyList(),
+                    performers = emptyList(),
+                    comments = emptyList()
+                )
+            )
+        }
+
+
+        return Artist(
+            id = item.getInt("id"),
+            name = item.getString("name"),
+            image = item.getString("image"),
+            description = item.getString("description"),
+            creationDate = item.getString("birthDate"),
+            albums = albums,
+            type = Artist.ArtistType.MUSICIAN
+        )
+    }
+
+    private fun parseBands(item: JSONObject): Artist {
+        val albumsArray = item.getJSONArray("albums")
+        val albums = mutableListOf<Album>()
+        for (j in 0 until albumsArray.length()) {
+            val albumItem = albumsArray.getJSONObject(j)
+            albums.add(
+                Album(
+                    id = albumItem.getInt("id"),
+                    name = albumItem.getString("name"),
+                    cover = albumItem.getString("cover"),
+                    description = albumItem.getString("description"),
+                    releaseDate = albumItem.getString("releaseDate"),
+                    genre = albumItem.getString("genre"),
+                    recordLabel = albumItem.getString("recordLabel"),
+                    tracks = emptyList(),
+                    performers = emptyList(),
+                    comments = emptyList()
+                )
+            )
+        }
+
+
+        return Artist(
+            id = item.getInt("id"),
+            name = item.getString("name"),
+            image = item.getString("image"),
+            description = item.getString("description"),
+            creationDate = item.getString("creationDate"),
+            albums = albums,
+            type = Artist.ArtistType.BAND
+        )
     }
 
     private fun parseAlbum(item: JSONObject): Album {
