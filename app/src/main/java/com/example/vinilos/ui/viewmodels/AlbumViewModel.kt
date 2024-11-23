@@ -41,7 +41,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         loadAlbums()
     }
 
-    private fun loadAlbums() {
+    fun loadAlbums() {
         viewModelScope.launch {
             try {
                 val albumList = albumRepository.getAlbums()
@@ -119,10 +119,8 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     fun createAlbum(newAlbum: Album) {
         viewModelScope.launch {
             try {
-                val createdAlbum = albumRepository.createAlbum(newAlbum)
-                val updatedAlbums = _albums.value?.toMutableList() ?: mutableListOf()
-                updatedAlbums.add(createdAlbum)
-                _albums.postValue(updatedAlbums)
+                albumRepository.createAlbum(newAlbum)
+                loadAlbums()
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)
             }

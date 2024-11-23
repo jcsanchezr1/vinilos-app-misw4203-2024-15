@@ -1,7 +1,9 @@
 package com.example.vinilos.ui.views
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +19,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var headerViewModel: HeaderViewModel
     private lateinit var binding: ActivityMainBinding
 
+    private val createAlbumLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.frame_layout) as? AlbumFragment
+                currentFragment?.refreshAlbums()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-
                 R.id.albums -> {
                     headerViewModel.setTitleAndAddButtonVisibility(
                         "Álbumes",
@@ -40,19 +50,16 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(AlbumFragment(), userTypeValue)
                     true
                 }
-
                 R.id.artists -> {
                     headerViewModel.setTitleAndAddButtonVisibility("Artistas", false)
                     loadFragment(ArtistFragment(), userTypeValue)
                     true
                 }
-
                 R.id.collectors -> {
                     headerViewModel.setTitleAndAddButtonVisibility("Coleccionistas", false)
                     loadFragment(CollectorFragment(), userTypeValue)
                     true
                 }
-
                 else -> false
             }
         }
@@ -72,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.headerLayout.ivAdd.setOnClickListener {
             val intent = Intent(this, CreateAlbumActivity::class.java)
-            startActivity(intent)
+            createAlbumLauncher.launch(intent)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.vinilos.ui.views
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -87,6 +88,10 @@ class AlbumFragment : Fragment() {
         viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
         }
+    }
+
+    fun refreshAlbums() {
+        viewModel.loadAlbums()
     }
 
     override fun onDestroyView() {

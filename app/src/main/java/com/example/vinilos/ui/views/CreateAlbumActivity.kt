@@ -1,5 +1,6 @@
 package com.example.vinilos.ui.views
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
@@ -127,8 +128,8 @@ class CreateAlbumActivity : AppCompatActivity() {
                     comments = emptyList()
                 )
                 albumViewModel.createAlbum(newAlbum)
+                setResult(Activity.RESULT_OK)
                 finish()
-
             } else {
                 Toast.makeText(this, "Todos los campos son requeridos", Toast.LENGTH_SHORT).show()
             }
