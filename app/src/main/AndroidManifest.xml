@@ -31,7 +31,6 @@
         <activity
             android:name=".ui.views.CreateAlbumActivity"
             android:windowSoftInputMode="adjustResize"/>
-            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.views.CollectorDetailActivity"
             android:windowSoftInputMode="adjustPan"/>

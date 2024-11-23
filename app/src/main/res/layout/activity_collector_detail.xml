@@ -24,7 +24,7 @@
                 android:id="@+id/btnCollectorDetailBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="Volver al listado de coleccionistas"
+                android:contentDescription="@string/back_collector"
                 android:src="@drawable/baseline_arrow_back_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -59,7 +59,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
-                android:contentDescription="Email del coleccionista"
+                android:contentDescription="@string/email_collectors"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintTop_toBottomOf="@id/tvAlbumDetailTitle"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -82,7 +82,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
-                android:contentDescription="Teléfono del coleccionista"
+                android:contentDescription="@string/phone_collectors"
                 android:src="@drawable/baseline_local_phone_24"
                 app:layout_constraintTop_toBottomOf="@id/tvEmailCollector"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="Artistas favoritos"
+                android:text="@string/fav_artists_collectors"
                 android:textColor="@color/color_text"
                 android:textSize="16sp"
                 android:layout_marginTop="32dp"

@@ -2,16 +2,19 @@ package com.example.vinilos.ui.views
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.Dialog
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.vinilos.R
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.databinding.ActivityCreateAlbumBinding
+import com.example.vinilos.databinding.CustomDialogBinding
 import com.example.vinilos.ui.viewmodels.AlbumViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -108,13 +111,15 @@ class CreateAlbumActivity : AppCompatActivity() {
 
             val inputFormat = SimpleDateFormat("MMMM dd, yyyy", Locale("es", "CO"))
             val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale("es", "CO"))
-            val parsedDate = inputFormat.parse(releaseDate)
-            val apiDate = outputFormat.format(parsedDate!!)
-            val dateWithTimeZone = apiDate.substring(0, apiDate.length - 2) + ":" + apiDate.substring(apiDate.length - 2)
 
             if (name.isNotEmpty() && cover.isNotEmpty() && releaseDate.isNotEmpty()
                 && description.isNotEmpty() && genre != "Selecciona un género" && recordLabel != "Selecciona una opción"
             ) {
+
+                val parsedDate = inputFormat.parse(releaseDate)
+                val apiDate = outputFormat.format(parsedDate!!)
+                val dateWithTimeZone = apiDate.substring(0, apiDate.length - 2) + ":" + apiDate.substring(apiDate.length - 2)
+
                 val newAlbum = Album(
                     id = 0,
                     name = name,
@@ -129,10 +134,52 @@ class CreateAlbumActivity : AppCompatActivity() {
                 )
                 albumViewModel.createAlbum(newAlbum)
                 setResult(Activity.RESULT_OK)
-                finish()
+                showCustomDialog(
+                    message = getString(R.string.create_album_success),
+                    isSuccess = true
+                )
+
             } else {
-                Toast.makeText(this, "Todos los campos son requeridos", Toast.LENGTH_SHORT).show()
+                showCustomDialog(
+                    message = getString(R.string.create_album_error),
+                    isSuccess = false
+                )
             }
         }
+    }
+
+    private fun showCustomDialog(message: String, isSuccess: Boolean) {
+        val dialog = Dialog(this)
+        val binding = CustomDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+
+        binding.dialogMessage.text = message
+
+        if (isSuccess){
+            binding.dialogTitle.text = getString(R.string.success_title)
+        } else {
+            binding.dialogTitle.text = getString(R.string.error_title)
+        }
+
+        val backgroundColor = if (isSuccess) {
+            ContextCompat.getColor(this, R.color.success)
+        } else {
+            ContextCompat.getColor(this, R.color.error)
+        }
+
+        binding.root.setBackgroundColor(backgroundColor)
+
+        val shapeDrawable = ContextCompat.getDrawable(this, R.drawable.alert_dialog_background) as GradientDrawable
+        shapeDrawable.setColor(backgroundColor)
+        dialog.window?.setBackgroundDrawable(shapeDrawable)
+
+        binding.dialogButton.setOnClickListener {
+            dialog.dismiss()
+            if(isSuccess){
+                finish()
+            }
+        }
+
+        dialog.show()
     }
 }
