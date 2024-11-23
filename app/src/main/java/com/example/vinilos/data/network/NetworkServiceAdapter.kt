@@ -1,7 +1,6 @@
 package com.example.vinilos.data.network
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
@@ -76,6 +75,22 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
             list.add(parseAlbum(item))
         }
         return list
+    }
+
+    suspend fun postAlbum(newAlbum: Album): Album {
+        val path = "albums"
+
+        val requestBody = JSONObject().apply {
+            put("name", newAlbum.name)
+            put("cover", newAlbum.cover)
+            put("releaseDate", newAlbum.releaseDate)
+            put("description", newAlbum.description)
+            put("genre", newAlbum.genre)
+            put("recordLabel", newAlbum.recordLabel)
+        }
+
+        val response = postRequest(path, requestBody)
+        return parseAlbum(JSONObject(response))
     }
 
     suspend fun getMusicians(): List<Artist> {
@@ -267,7 +282,12 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
     }
 
     private fun parseAlbum(item: JSONObject): Album {
-        val tracksArray = item.getJSONArray("tracks")
+        val tracksArray = if (item.has("tracks") && !item.isNull("tracks")) {
+            item.getJSONArray("tracks")
+        } else {
+            JSONArray()
+        }
+
         val tracks = mutableListOf<Track>()
         for (j in 0 until tracksArray.length()) {
             val trackItem = tracksArray.getJSONObject(j)
@@ -279,8 +299,12 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
                 )
             )
         }
+        val performersArray = if (item.has("performers") && !item.isNull("performers")) {
+            item.getJSONArray("performers")
+        } else {
+            JSONArray()
+        }
 
-        val performersArray = item.getJSONArray("performers")
         val performers = mutableListOf<Artist>()
         for (j in 0 until performersArray.length()) {
             val performerItem = performersArray.getJSONObject(j)
@@ -297,7 +321,12 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
             )
         }
 
-        val commentsArray = item.getJSONArray("comments")
+        val commentsArray = if (item.has("comments") && !item.isNull("comments")) {
+            item.getJSONArray("comments")
+        } else {
+            JSONArray()
+        }
+
         val comments = mutableListOf<Comment>()
         for (j in 0 until commentsArray.length()) {
             val commentItem = commentsArray.getJSONObject(j)

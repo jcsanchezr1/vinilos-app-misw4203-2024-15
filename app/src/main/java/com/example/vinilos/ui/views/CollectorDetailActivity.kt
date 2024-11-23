@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.ActivityCollectorDetailBinding
-import com.example.vinilos.ui.adapters.ArtistAdapter
 import com.example.vinilos.ui.adapters.CommentAdapter
 import com.example.vinilos.ui.adapters.PerformerAdapter
 import com.example.vinilos.ui.viewmodels.CollectorViewModel

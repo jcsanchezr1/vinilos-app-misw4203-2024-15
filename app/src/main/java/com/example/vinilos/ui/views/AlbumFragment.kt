@@ -89,6 +89,10 @@ class AlbumFragment : Fragment() {
         }
     }
 
+    fun refreshAlbums() {
+        viewModel.loadAlbums()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

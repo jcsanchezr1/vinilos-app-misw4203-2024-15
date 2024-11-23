@@ -41,7 +41,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
         loadAlbums()
     }
 
-    private fun loadAlbums() {
+    fun loadAlbums() {
         viewModelScope.launch {
             try {
                 val albumList = albumRepository.getAlbums()
@@ -112,6 +112,17 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
                 loadComments(albumId)
             } catch (e: Exception) {
                 _eventNetworkError.value = true
+            }
+        }
+    }
+
+    fun createAlbum(newAlbum: Album) {
+        viewModelScope.launch {
+            try {
+                albumRepository.createAlbum(newAlbum)
+                loadAlbums()
+            } catch (e: Exception) {
+                _eventNetworkError.postValue(true)
             }
         }
     }

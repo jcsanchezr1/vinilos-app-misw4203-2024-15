@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.repositories.BandRepository
 import com.example.vinilos.data.repositories.MusicianRepository
