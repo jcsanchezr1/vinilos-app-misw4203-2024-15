@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.vinilos.data.cache.CacheManager
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Comment
 import com.example.vinilos.data.repositories.AlbumRepository
@@ -44,14 +45,14 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     fun loadAlbums() {
         viewModelScope.launch {
             try {
-                val albumList = albumRepository.getAlbums()
-                _albums.postValue(albumList)
+                _albums.postValue(albumRepository.getAlbums())
                 _eventNetworkError.postValue(false)
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)
             }
         }
     }
+
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
@@ -119,13 +120,19 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     fun createAlbum(newAlbum: Album) {
         viewModelScope.launch {
             try {
-                albumRepository.createAlbum(newAlbum)
-                loadAlbums()
+                val createdAlbum = albumRepository.createAlbum(newAlbum)
+
+                val cacheManager = CacheManager.getInstance()
+                cacheManager.addAlbum(createdAlbum)
+
+                val updatedAlbums = cacheManager.getAlbums()
+                _albums.postValue(updatedAlbums)
             } catch (e: Exception) {
                 _eventNetworkError.postValue(true)
             }
         }
     }
+
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
