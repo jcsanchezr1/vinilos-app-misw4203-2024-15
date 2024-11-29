@@ -10,6 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -29,18 +30,18 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class AlbumDetailListTest {
+class ArtistDetailTest {
 
     @Rule
     @JvmField
     var mActivityScenarioRule = ActivityScenarioRule(HomeActivity::class.java)
 
     @Test
-    fun albumDetailActivityTest() {
+    fun artistDetailTest() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(3000)
+        Thread.sleep(500)
 
         val appCompatButton = onView(
             allOf(
@@ -63,60 +64,74 @@ class AlbumDetailListTest {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(3000)
+        Thread.sleep(700)
+
+        val bottomNavigationItemView = onView(
+            allOf(
+                withId(R.id.artists), withContentDescription("Artistas"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.bottomNavigationView),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        bottomNavigationItemView.perform(click())
 
         val recyclerView = onView(
             allOf(
-                withId(R.id.albumRv),
+                withId(R.id.artistRv),
                 childAtPosition(
                     withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                    3
+                    1
                 )
             )
         )
-        recyclerView.perform(actionOnItemAtPosition<ViewHolder>(0, click()))
+        recyclerView.perform(actionOnItemAtPosition<ViewHolder>(2, click()))
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(3000)
+        Thread.sleep(700)
 
         val textView = onView(
             allOf(
-                withId(R.id.tvAlbumDetailTitle), withText("A Day at the Races"),
+                withId(R.id.tvAlbumDetailTitle), withText("Rubén Blades Bellido de Luna"),
                 withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
                 isDisplayed()
             )
         )
         textView.check(matches(isDisplayed()))
-        Thread.sleep(3000)
+
         val textView2 = onView(
             allOf(
-                withId(R.id.tvArtistName), withText("Queen"),
-                withParent(withParent(withId(R.id.rvArtistList))),
+                withId(R.id.tvDate), withText("Julio 15 de 1948"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
                 isDisplayed()
             )
         )
         textView2.check(matches(isDisplayed()))
-        Thread.sleep(3000)
-        val textView3 = onView(
-            allOf(
-                withId(R.id.tvAlbumDetailDescription),
-                withText("El álbum fue grabado en los Estudios Sarm West, The Manor and Wessex en Inglaterra y con el ingeniero Mike Stone. El título del álbum es una referencia directa al anterior, A Night at the Opera. Ambos álbumes están titulados como películas de los hermanos Marx."),
-                withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
-                isDisplayed()
-            )
-        )
-        textView3.check(matches(isDisplayed()))
-        Thread.sleep(3000)
+
         val textView4 = onView(
             allOf(
-                withId(R.id.tvComments), withText("Comentarios"),
+                withId(R.id.tvAlbumes), withText("Álbumes"),
                 withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
                 isDisplayed()
             )
         )
-        textView4.check(matches(withText("Comentarios")))
+        textView4.check(matches(withText("Álbumes")))
+
+        val textView5 = onView(
+            allOf(
+                withId(R.id.tvAlbumes), withText("Álbumes"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
+                isDisplayed()
+            )
+        )
+        textView5.check(matches(withText("Álbumes")))
     }
 
     private fun childAtPosition(
