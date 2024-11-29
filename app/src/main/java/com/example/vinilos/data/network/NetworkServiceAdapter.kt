@@ -5,6 +5,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.vinilos.data.cache.CacheManager
 import com.example.vinilos.data.models.Album
 import com.example.vinilos.data.models.Artist
 import com.example.vinilos.data.models.Collector
@@ -66,15 +67,24 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
         }
 
     suspend fun getAlbums(): List<Album> {
+        val cacheManager = CacheManager.getInstance()
+
+        val cachedAlbums = cacheManager.getAlbums()
+        if (cachedAlbums.isNotEmpty()) {
+            return cachedAlbums
+        }
+
         val response = getRequest("albums")
         val resp = JSONArray(response)
-        val list = mutableListOf<Album>()
+        val albumList = mutableListOf<Album>()
 
         for (i in 0 until resp.length()) {
             val item = resp.getJSONObject(i)
-            list.add(parseAlbum(item))
+            albumList.add(parseAlbum(item))
         }
-        return list
+
+        cacheManager.setAlbums(albumList)
+        return albumList
     }
 
     suspend fun postAlbum(newAlbum: Album): Album {
@@ -120,7 +130,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
 
     suspend fun getComments(albumId: Int): List<Comment> {
 
-        val cachedComments = CacheManager.getInstance(applicationContext).getComments(albumId)
+        val cachedComments = CacheManager.getInstance().getComments(albumId)
         if (cachedComments.isNotEmpty()) {
             return cachedComments
         }
@@ -128,7 +138,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
         val response = getRequest("albums/$albumId/comments")
         val comments = parseComments(response)
 
-        CacheManager.getInstance(applicationContext).addComments(albumId, comments)
+        CacheManager.getInstance().addComments(albumId, comments)
 
         return comments
     }
@@ -145,7 +155,7 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
         val response = postRequest(path, requestBody)
         val postedComment = parseComment(response)
 
-        CacheManager.getInstance(applicationContext).addComments(albumId, listOf(postedComment))
+        CacheManager.getInstance().addComments(albumId, listOf(postedComment))
 
         return postedComment
     }
@@ -381,31 +391,5 @@ class NetworkServiceAdapter(private val applicationContext: Context) {
             rating = jsonObject.getInt("rating"),
             collector = 100
         )
-    }
-}
-
-class CacheManager(applicationContext: Context) {
-    companion object{
-        private var instance: CacheManager? = null
-        fun getInstance(context: Context) =
-            instance ?: synchronized(this) {
-                instance ?: CacheManager(context.applicationContext).also {
-                    instance = it
-                }
-            }
-    }
-    private var comments: HashMap<Int, List<Comment>> = hashMapOf()
-    fun addComments(albumId: Int, newComments: List<Comment>) {
-        if (comments.containsKey(albumId)) {
-            val existingComments = comments[albumId]?.toMutableList() ?: mutableListOf()
-            existingComments.addAll(newComments)
-            comments[albumId] = existingComments
-        } else {
-            comments[albumId] = newComments
-        }
-    }
-
-    fun getComments(albumId: Int) : List<Comment>{
-        return if (comments.containsKey(albumId)) comments[albumId]!! else listOf()
     }
 }

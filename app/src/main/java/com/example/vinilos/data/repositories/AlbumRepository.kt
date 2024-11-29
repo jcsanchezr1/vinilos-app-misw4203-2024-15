@@ -13,7 +13,8 @@ class AlbumRepository(context: Context) {
     }
 
     suspend fun createAlbum(newAlbum: Album): Album {
-        return networkServiceAdapter.postAlbum(newAlbum)
+        val createdAlbum = networkServiceAdapter.postAlbum(newAlbum)
+        return createdAlbum
     }
 
 }
