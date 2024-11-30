@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -105,15 +106,10 @@ class ArtistDetailTest {
             )
         )
         textView.check(matches(isDisplayed()))
-
-        val textView2 = onView(
-            allOf(
-                withId(R.id.tvDate), withText("Julio 15 de 1948"),
-                withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
-                isDisplayed()
-            )
-        )
-        textView2.check(matches(isDisplayed()))
+        Thread.sleep(700)
+        onView(withId(R.id.tvDate))
+            .perform(scrollTo())
+            .check(matches(withText("Julio 15 de 1948")))
 
         val textView4 = onView(
             allOf(
