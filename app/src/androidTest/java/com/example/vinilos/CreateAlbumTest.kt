@@ -51,6 +51,8 @@ class CreateAlbumTestTest {
         )
         appCompatButton.perform(click())
 
+        Thread.sleep(900)
+
         val appCompatImageView = onView(
             allOf(
                 withId(R.id.ivAdd), withContentDescription("Crear álbum"),
@@ -69,6 +71,8 @@ class CreateAlbumTestTest {
         )
         appCompatImageView.perform(click())
 
+        Thread.sleep(900)
+
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.etAlbumName),
@@ -83,6 +87,8 @@ class CreateAlbumTestTest {
         )
         appCompatEditText.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
 
+        Thread.sleep(900)
+
         val appCompatEditText2 = onView(
             allOf(
                 withId(R.id.etAlbumCover),
@@ -96,6 +102,8 @@ class CreateAlbumTestTest {
             )
         )
         appCompatEditText2.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
+
+        Thread.sleep(900)
 
         val appCompatEditText3 = onView(
             allOf(
@@ -115,6 +123,7 @@ class CreateAlbumTestTest {
             .inRoot(isDialog())
             .perform(click())
 
+        Thread.sleep(900)
 
         val appCompatEditText4 = onView(
             allOf(
@@ -133,7 +142,8 @@ class CreateAlbumTestTest {
         )
         appCompatEditText4.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
 
-        // Select genre
+        Thread.sleep(900)
+
         onView(withId(R.id.spinnerGenre))
             .perform(scrollTo(), click())
 
@@ -142,7 +152,8 @@ class CreateAlbumTestTest {
             .atPosition(1)
             .perform(click())
 
-// Select record label
+        Thread.sleep(900)
+
         onView(withId(R.id.spinnerRecordLabel))
             .perform(scrollTo(), click())
 
@@ -151,7 +162,7 @@ class CreateAlbumTestTest {
             .atPosition(1)
             .perform(click())
 
-
+        Thread.sleep(900)
         val appCompatButton3 = onView(
             allOf(
                 withId(R.id.btnSubmitAlbum), withText("Crear álbum"),
