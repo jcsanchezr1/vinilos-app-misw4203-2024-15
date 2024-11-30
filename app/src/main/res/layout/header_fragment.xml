@@ -21,26 +21,29 @@
             android:textColor="@color/color_text"
             android:fontFamily="@font/poppins_semibold"
             android:text="@{header.title}"
+            android:contentDescription='@{"@string/header_title_description" + " " + header.title}'
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:paddingHorizontal="8dp" />
+            app:layout_constraintTop_toTopOf="@id/ivLogout"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivLogout"/>
 
         <ImageView
             android:id="@+id/ivAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_add_24"
+            android:padding="12dp"
             android:contentDescription="@string/add_album"
             android:visibility="@{header.addButtonVisibility}"
             app:layout_constraintEnd_toStartOf="@id/ivLogout"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="12dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_exit_to_app_24"
+            android:padding="12dp"
             android:contentDescription="@string/logout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

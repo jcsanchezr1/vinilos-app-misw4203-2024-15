@@ -1,5 +1,6 @@
 package com.example.vinilos.ui.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vinilos.common.Constant
 import com.example.vinilos.databinding.CollectorFragmentBinding
 import com.example.vinilos.ui.viewmodels.CollectorViewModel
 import com.example.vinilos.ui.adapters.CollectorAdapter
@@ -34,7 +36,12 @@ class CollectorFragment : Fragment() {
     ): View {
         _binding = CollectorFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModelAdapter = CollectorAdapter()
+
+        viewModelAdapter = CollectorAdapter { collector ->
+            val intent = Intent(requireContext(), CollectorDetailActivity::class.java)
+            intent.putExtra(Constant.COLLECTOR_ID, collector.id)
+            startActivity(intent)
+        }
 
         progressBar = binding.progressBarCollector
         recyclerView = binding.collectorRv
@@ -100,6 +107,7 @@ class CollectorFragment : Fragment() {
         val sortedFilterCollectors = filteredCollectors.sortedBy { it.name }
         viewModelAdapter.submitList(sortedFilterCollectors)
         binding.tvNoResults.visibility = if (filteredCollectors.isEmpty()) View.VISIBLE else View.GONE
+        binding.collectorRv.visibility = if (filteredCollectors.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun String.normalize(): String {
@@ -107,5 +115,4 @@ class CollectorFragment : Fragment() {
             .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
             .lowercase(Locale.getDefault())
     }
-
 }
