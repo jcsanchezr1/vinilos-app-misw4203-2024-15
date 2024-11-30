@@ -5,16 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
-import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withClassName
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -31,19 +25,14 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class CreateAlbumTest {
+class CreateAlbumTestTest {
 
     @Rule
     @JvmField
     var mActivityScenarioRule = ActivityScenarioRule(HomeActivity::class.java)
 
     @Test
-    fun homeActivityTest() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(500)
-
+    fun createAlbumTest() {
         val appCompatButton = onView(
             allOf(
                 withId(R.id.collectorButton), withText("Soy coleccionista"),
@@ -62,10 +51,7 @@ class CreateAlbumTest {
         )
         appCompatButton.perform(click())
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(700)
+        Thread.sleep(900)
 
         val appCompatImageView = onView(
             allOf(
@@ -85,10 +71,7 @@ class CreateAlbumTest {
         )
         appCompatImageView.perform(click())
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(700)
+        Thread.sleep(900)
 
         val appCompatEditText = onView(
             allOf(
@@ -102,23 +85,11 @@ class CreateAlbumTest {
                 )
             )
         )
-        appCompatEditText.perform(scrollTo(), click())
+        appCompatEditText.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
+
+        Thread.sleep(900)
 
         val appCompatEditText2 = onView(
-            allOf(
-                withId(R.id.etAlbumName),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    4
-                )
-            )
-        )
-        appCompatEditText2.perform(scrollTo(), replaceText("Test"), closeSoftKeyboard())
-
-        val appCompatEditText3 = onView(
             allOf(
                 withId(R.id.etAlbumCover),
                 childAtPosition(
@@ -130,9 +101,11 @@ class CreateAlbumTest {
                 )
             )
         )
-        appCompatEditText3.perform(scrollTo(), replaceText("Test"), closeSoftKeyboard())
+        appCompatEditText2.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
 
-        val appCompatEditText4 = onView(
+        Thread.sleep(900)
+
+        val appCompatEditText3 = onView(
             allOf(
                 withId(R.id.etAlbumReleaseDate),
                 childAtPosition(
@@ -144,27 +117,15 @@ class CreateAlbumTest {
                 )
             )
         )
-        appCompatEditText4.perform(scrollTo(), click())
+        appCompatEditText3.perform(scrollTo(), click())
 
-        val appCompatButton2 = onView(
-            allOf(
-                withId(android.R.id.button1), withText("OK"),
-                childAtPosition(
-                    allOf(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        childAtPosition(
-                            withClassName(`is`("android.widget.LinearLayout")),
-                            3
-                        )
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatButton2.perform(click())
+        onView(withText("OK"))
+            .inRoot(isDialog())
+            .perform(click())
 
-        val appCompatEditText5 = onView(
+        Thread.sleep(900)
+
+        val appCompatEditText4 = onView(
             allOf(
                 withId(R.id.etAlbumDescription),
                 childAtPosition(
@@ -179,62 +140,29 @@ class CreateAlbumTest {
                 )
             )
         )
-        appCompatEditText5.perform(scrollTo(), replaceText("Test"), closeSoftKeyboard())
+        appCompatEditText4.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
 
+        Thread.sleep(900)
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(300)
+        onView(withId(R.id.spinnerGenre))
+            .perform(scrollTo(), click())
 
-        val appCompatSpinner = onView(
-            allOf(
-                withId(R.id.spinnerGenre),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    12
-                )
-            )
-        )
-        appCompatSpinner.perform(scrollTo(), click())
-
-        val appCompatTextView = onData(anything())
-            .inAdapterView(withClassName(`is`("androidx.appcompat.widget.DropDownListView")))
+        onData(anything())
+            .inRoot(RootMatchers.isPlatformPopup())
             .atPosition(1)
-        appCompatTextView.perform(click())
-        pressBack()
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(300)
+            .perform(click())
 
-        val appCompatSpinner2 = onView(
-            allOf(
-                withId(R.id.spinnerRecordLabel),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    14
-                )
-            )
-        )
-        appCompatSpinner2.perform(scrollTo(), click())
+        Thread.sleep(900)
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(250)
+        onView(withId(R.id.spinnerRecordLabel))
+            .perform(scrollTo(), click())
 
-        val appCompatTextView2 = onData(anything())
-            .inAdapterView(withClassName(`is`("androidx.appcompat.widget.DropDownListView")))
+        onData(anything())
+            .inRoot(RootMatchers.isPlatformPopup())
             .atPosition(1)
-        appCompatTextView2.perform(click())
+            .perform(click())
 
+        Thread.sleep(900)
         val appCompatButton3 = onView(
             allOf(
                 withId(R.id.btnSubmitAlbum), withText("Crear álbum"),
@@ -263,7 +191,6 @@ class CreateAlbumTest {
             )
         )
         appCompatButton4.perform(click())
-
     }
 
     private fun childAtPosition(

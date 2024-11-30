@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -38,10 +39,7 @@ class ArtistDetailTest {
 
     @Test
     fun artistDetailTest() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(500)
+        Thread.sleep(900)
 
         val appCompatButton = onView(
             allOf(
@@ -61,10 +59,7 @@ class ArtistDetailTest {
         )
         appCompatButton.perform(click())
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(700)
+        Thread.sleep(900)
 
         val bottomNavigationItemView = onView(
             allOf(
@@ -92,10 +87,7 @@ class ArtistDetailTest {
         )
         recyclerView.perform(actionOnItemAtPosition<ViewHolder>(2, click()))
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(700)
+        Thread.sleep(900)
 
         val textView = onView(
             allOf(
@@ -104,17 +96,14 @@ class ArtistDetailTest {
                 isDisplayed()
             )
         )
+        Thread.sleep(900)
         textView.check(matches(isDisplayed()))
+        Thread.sleep(700)
+        onView(withId(R.id.tvDate))
+            .perform(scrollTo())
+            .check(matches(withText("Julio 15 de 1948")))
 
-        val textView2 = onView(
-            allOf(
-                withId(R.id.tvDate), withText("Julio 15 de 1948"),
-                withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java))),
-                isDisplayed()
-            )
-        )
-        textView2.check(matches(isDisplayed()))
-
+        Thread.sleep(900)
         val textView4 = onView(
             allOf(
                 withId(R.id.tvAlbumes), withText("Álbumes"),
@@ -124,6 +113,7 @@ class ArtistDetailTest {
         )
         textView4.check(matches(withText("Álbumes")))
 
+        Thread.sleep(900)
         val textView5 = onView(
             allOf(
                 withId(R.id.tvAlbumes), withText("Álbumes"),
