@@ -7,6 +7,7 @@
     <string name="publish_button_text">Publicar</string>
     <string name="collector_button_text">Soy coleccionista</string>
     <string name="albums_bottom_nav">Álbumes</string>
+    <string name="header_title_description">Listado de</string>
     <string name="artists_bottom_nav">Artistas</string>
     <string name="collectors_bottom_nav">Coleccionistas</string>
     <string name="add_album">Crear álbum</string>
