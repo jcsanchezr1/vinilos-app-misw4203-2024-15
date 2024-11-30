@@ -17,13 +17,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/btnCollectorDetailBack"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="4dp"
                 android:contentDescription="@string/back_collector"
                 android:src="@drawable/baseline_arrow_back_24"
                 app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +34,7 @@
                 android:id="@+id/tvCollectorDetailHeaderTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="12dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/collectors_bottom_nav"
                 android:textColor="@color/color_text"
@@ -48,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:layout_marginTop="40dp"
+                android:layout_marginHorizontal="16dp"
                 android:textColor="@color/color_text"
                 android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@id/tvCollectorDetailHeaderTitle"
@@ -59,6 +61,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:contentDescription="@string/email_collectors"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintTop_toBottomOf="@id/tvAlbumDetailTitle"
@@ -81,6 +84,7 @@
                 android:id="@+id/ivPhone"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
                 android:contentDescription="@string/phone_collectors"
                 android:src="@drawable/baseline_local_phone_24"
@@ -109,6 +113,7 @@
                 android:textColor="@color/color_text"
                 android:textSize="16sp"
                 android:layout_marginTop="32dp"
+                android:layout_marginHorizontal="16dp"
                 app:layout_constraintTop_toTopOf="@id/rvArtistList"
                 app:layout_constraintBottom_toBottomOf="@id/tvPhoneCollector"
                 app:layout_constraintStart_toStartOf="parent"/>
@@ -121,13 +126,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvComments"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"/>
 
             <TextView
                 android:id="@+id/tvComments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:layout_marginHorizontal="16dp"
                 android:textColor="@color/color_text"
                 android:textSize="18sp"
                 android:fontFamily="@font/poppins_semibold"
@@ -143,7 +150,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvComments"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp" />
+                android:layout_margin="16dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

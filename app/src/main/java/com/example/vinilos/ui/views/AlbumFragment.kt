@@ -120,5 +120,6 @@ class AlbumFragment : Fragment() {
         val sortedFilterAlbums = filteredAlbums.sortedBy { it.name }
         viewModelAdapter.submitList(sortedFilterAlbums)
         binding.tvNoResults.visibility = if (filteredAlbums.isEmpty()) View.VISIBLE else View.GONE
+        binding.albumRv.visibility = if (filteredAlbums.isEmpty()) View.GONE else View.VISIBLE
     }
 }

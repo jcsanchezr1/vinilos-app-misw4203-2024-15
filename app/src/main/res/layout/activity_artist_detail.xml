@@ -17,13 +17,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/btnArtistDetailBack"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="4dp"
                 android:contentDescription="@string/back_artist"
                 android:src="@drawable/baseline_arrow_back_24"
                 app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +34,7 @@
                 android:id="@+id/tvAlbumDetailHeaderTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="12dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/artists_bottom_nav"
                 android:textColor="@color/color_text"
@@ -67,7 +68,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
-                android:paddingTop="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:textColor="@color/color_text"
                 android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@id/cardview"
@@ -79,6 +81,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:textColor="@color/hint_text"
                 android:textSize="12sp"
                 android:text="@{viewModel.formatDate(artist.creationDate)}"
@@ -91,7 +94,8 @@
                 android:id="@+id/tvAlbumDetailDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginHorizontal="16dp"
                 android:textColor="@color/color_text"
                 android:textSize="14sp"
                 android:text="@{artist.description}"
@@ -105,6 +109,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
+                android:layout_marginHorizontal="16dp"
                 android:textColor="@color/color_text"
                 android:textSize="18sp"
                 android:fontFamily="@font/poppins_semibold"
@@ -120,7 +125,8 @@
                 app:layout_constraintTop_toBottomOf="@id/tvAlbumes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp" />
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="16dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

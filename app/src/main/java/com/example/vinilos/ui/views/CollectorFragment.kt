@@ -107,6 +107,7 @@ class CollectorFragment : Fragment() {
         val sortedFilterCollectors = filteredCollectors.sortedBy { it.name }
         viewModelAdapter.submitList(sortedFilterCollectors)
         binding.tvNoResults.visibility = if (filteredCollectors.isEmpty()) View.VISIBLE else View.GONE
+        binding.collectorRv.visibility = if (filteredCollectors.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun String.normalize(): String {
