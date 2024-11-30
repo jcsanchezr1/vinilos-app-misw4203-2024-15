@@ -7,10 +7,13 @@
     <string name="publish_button_text">Publicar</string>
     <string name="collector_button_text">Soy coleccionista</string>
     <string name="albums_bottom_nav">Álbumes</string>
+    <string name="header_title_description">Listado de</string>
     <string name="artists_bottom_nav">Artistas</string>
     <string name="collectors_bottom_nav">Coleccionistas</string>
     <string name="add_album">Crear álbum</string>
-    <string name="back_album">Ir a listado de álbumes</string>
+    <string name="back_album">Volver a listado de álbumes</string>
+    <string name="back_artist">Volver a listado de artistas</string>
+    <string name="back_collector">Volver a listado de coleccionistas</string>
     <string name="logout">Cerrar session</string>
     <string name="hitn_search_field">Buscar</string>
     <string name="go_to_detail">Ir al detalle</string>
@@ -39,5 +42,33 @@
     <string name="type_collector">collector</string>
     <string name="cover_image_collector">Logo del coleccionista</string>
     <string name="empty_collectors">No se encontraron coleccionistas que coincidan con tu búsqueda</string>
+    <string name="email_collectors">Email del coleccionista</string>
+    <string name="phone_collectors">Teléfono del coleccionista</string>
+    <string name="fav_artists_collectors">Artistas favoritos</string>
     <string name="char_counter_default">0/500</string>
+    <string name="create_album_title">Crear álbum</string>
+    <string name="create_album_name">Nombre</string>
+    <string name="create_album_image">Imagen de portada</string>
+    <string name="create_album_date">Fecha de publicación</string>
+    <string name="create_album_description">Descripción</string>
+    <string name="create_album_genre">Género</string>
+    <string name="create_album_recordLabel">Sello discográfico</string>
+    <string name="create_album_button">Crear álbum</string>
+    <string-array name="genre_options">
+        <item>Selecciona un género</item>
+        <item>Classical</item>
+        <item>Salsa</item>
+        <item>Rock</item>
+        <item>Folk</item>
+    </string-array>
+    <string-array name="recordLabel_options">
+        <item>Selecciona una opción</item>
+        <item>Sony Music</item>
+        <item>EMI</item>
+        <item>Discos Fuentes</item>
+        <item>Elektra</item>
+        <item>Fania Records</item>
+    </string-array>
+    <string name="create_album_error">No debes dejar vacío ningún campo del formulario.</string>
+    <string name="create_album_success">Tu álbum se ha creado exitosamente.</string>
 </resources>

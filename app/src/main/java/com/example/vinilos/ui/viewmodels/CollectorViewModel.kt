@@ -3,6 +3,7 @@ package com.example.vinilos.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +23,6 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
     private var _isNetworkErrorShown = MutableLiveData(false)
-
     val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
 
     init {
@@ -39,6 +39,14 @@ class CollectorViewModel(application: Application) : AndroidViewModel(applicatio
                 _eventNetworkError.postValue(true)
             }
         }
+    }
+
+    fun getCollectorById(id: Int): LiveData<Collector?> {
+        val result = MediatorLiveData<Collector?>()
+        result.addSource(_collectors) { collectors ->
+            result.value = collectors?.find { it.id == id }
+        }
+        return result
     }
 
     fun onNetworkErrorShown() {

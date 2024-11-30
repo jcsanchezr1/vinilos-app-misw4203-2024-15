@@ -11,9 +11,8 @@ import com.example.vinilos.R
 import com.example.vinilos.data.models.Collector
 import com.example.vinilos.databinding.CollectorItemBinding
 
-class CollectorAdapter : ListAdapter<Collector, CollectorAdapter.CollectorViewHolder>(
-    CollectorDiffCallback
-) {
+class CollectorAdapter(private val onCollectorClick: (Collector) -> Unit) :
+    ListAdapter<Collector, CollectorAdapter.CollectorViewHolder>(CollectorDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectorViewHolder {
         val withDataBinding: CollectorItemBinding = DataBindingUtil.inflate(
@@ -28,6 +27,9 @@ class CollectorAdapter : ListAdapter<Collector, CollectorAdapter.CollectorViewHo
     override fun onBindViewHolder(holder: CollectorViewHolder, position: Int) {
         val collector = getItem(position)
         holder.viewDataBinding.collector = collector
+        holder.viewDataBinding.root.setOnClickListener {
+            onCollectorClick(collector)
+        }
     }
 
     class CollectorViewHolder(val viewDataBinding: CollectorItemBinding) :
@@ -49,6 +51,4 @@ class CollectorAdapter : ListAdapter<Collector, CollectorAdapter.CollectorViewHo
             }
         }
     }
-
-
 }
